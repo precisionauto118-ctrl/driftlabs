@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Drift Labs: professional remote Megasquirt tuning for 1990-2005 NA and NB Mazda Miatas in all 50 states. 10+ years in the tuning business. MSPNP, MS2 and MS3 tunes built from your TunerStudio datalogs. $350 full tune.">
+<meta name="keywords" content="Drift Labs, Miata tuning, remote Miata tune, Megasquirt tuning, MSPNP tune, NA Miata, NB Miata, TunerStudio, Miata turbo tune, professional Miata tuner">
+<meta property="og:title" content="Drift Labs | Professional Remote Megasquirt Tuning for NA &amp; NB Miatas">
+<meta property="og:description" content="Professional remote Megasquirt tuning for NA and NB Miatas in all 50 states. 10+ years in the tuning business. $350 full tune.">
+<style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
+<title>Drift Labs | Professional Remote Megasquirt Tuning for NA &amp; NB Miatas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: tuner's workbench. Hero pairs the pitch with a live-looking VE table; sections stack in a single 1080px column. */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --fg:#15181d; --muted:#5b6370; --line:#d9dde3;
+  --accent:#c8202f; --accent-ink:#ffffff; --blue:#1f4e8c;
+  --heat-lo:#2f6fb8; --heat-mid:#e9c13b; --heat-hi:#d2352f;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1216; --surface:#171b21; --fg:#e8eaee; --muted:#9aa3b0; --line:#2a313b;
+  --accent:#ef4452; --accent-ink:#ffffff; --blue:#7fa8e0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1216; --surface:#171b21; --fg:#e8eaee; --muted:#9aa3b0; --line:#2a313b;
+  --accent:#ef4452; --accent-ink:#ffffff; --blue:#7fa8e0; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+a{color:var(--blue)}
+.eyebrow{font-family:var(--mono);font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}
+.muted{color:var(--muted)}
+
+/* Nav */
+nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:20px;border-bottom:1px solid var(--line)}
+.brand{font-family:var(--display);font-weight:900;font-size:1.15rem;letter-spacing:.01em;text-transform:uppercase}
+.brand span{color:var(--accent)}
+nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0;flex-wrap:wrap;font-size:.95rem}
+nav a{color:var(--fg);text-decoration:none}
+nav a:hover,nav a:focus-visible{color:var(--accent)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:minmax(0,760px);gap:48px;align-items:center;padding-block:56px 64px}
+.hero>*{min-width:0}
+.hero h1{font-size:clamp(2.3rem,5.4vw,4rem);font-weight:900;letter-spacing:-.02em;margin-block:12px 18px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{font-size:1.12rem;max-width:34em;color:var(--muted)}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:6px;font-weight:600;text-decoration:none;font-size:1rem;border:2px solid transparent;cursor:pointer;font-family:var(--body)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{border-color:var(--line);color:var(--fg);background:transparent}
+.btn-ghost:hover{border-color:var(--fg)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.chip{font-family:var(--mono);font-size:.78rem;padding:4px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted)}
+
+/* VE table */
+.ve{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;box-shadow:0 12px 40px -18px rgba(0,0,0,.35)}
+.ve-head{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.ve-scroll{overflow-x:auto}
+.ve table{border-collapse:separate;border-spacing:2px;font-family:var(--mono);font-size:.7rem;font-variant-numeric:tabular-nums;width:100%;min-width:300px}
+.ve th{color:var(--muted);font-weight:500;padding:2px 4px;text-align:center}
+.ve td{text-align:center;padding:5px 2px;border-radius:2px;color:#111;font-weight:500}
+.ve-foot{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:8px}
+
+/* Sections */
+section{padding-block:64px;border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:36px;max-width:640px}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;gap:8px;align-content:start;padding-top:16px;border-top:3px solid var(--fg)}
+.steps li::before{content:"Step " counter(s);font-family:var(--mono);font-size:.75rem;color:var(--accent);text-transform:uppercase;letter-spacing:.1em}
+.steps p{color:var(--muted);font-size:.95rem}
+
+/* Pricing */
+.pricing{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:start}
+.pricing>*{min-width:0}
+.plan{background:var(--surface);border:2px solid var(--fg);border-radius:10px;padding:28px;display:grid;gap:18px}
+.price{font-family:var(--display);font-size:3.4rem;font-weight:900;line-height:1}
+.price small{font-size:1rem;font-weight:500;color:var(--muted);font-family:var(--body)}
+.plan ul,.extras ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.plan li{display:grid;grid-template-columns:20px 1fr;gap:8px}
+.plan li::before{content:"✓";color:var(--accent);font-weight:700}
+.extras{display:grid;gap:16px;padding:8px 0}
+.extras li{display:flex;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.extras li b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{font-size:.85rem;color:var(--muted)}
+
+/* Requirements */
+.req{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.req>div{display:grid;gap:6px;align-content:start}
+.req p{color:var(--muted);font-size:.95rem}
+
+/* Form */
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:28px}
+.field{display:grid;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-size:.85rem;font-weight:600}
+input,select,textarea{font:inherit;font-size:.95rem;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);width:100%}
+textarea{min-height:96px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;font-weight:400}
+.check input{width:auto;margin-top:4px}
+.form-actions{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.err{color:var(--accent);font-size:.88rem}
+.summary{grid-column:1/-1;display:grid;gap:12px;border-top:1px solid var(--line);padding-top:18px}
+.summary pre{font-family:var(--mono);font-size:.8rem;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:14px;white-space:pre-wrap;overflow-x:auto;margin:0}
+.email{font-family:var(--mono);user-select:all;font-weight:500}
+
+/* FAQ */
+.faq{display:grid;gap:0}
+details{border-bottom:1px solid var(--line);padding-block:16px}
+summary{cursor:pointer;font-weight:600;font-size:1.02rem}
+details p{margin-top:10px;color:var(--muted);max-width:65ch}
+
+footer{border-top:1px solid var(--line);padding-block:32px 48px;display:grid;gap:10px;font-size:.85rem;color:var(--muted)}
+footer .legal{max-width:80ch}
+
+/* Trust bar */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);background:var(--fg);color:var(--bg);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.trust>div{padding:22px 20px;display:grid;gap:4px;border-right:1px solid color-mix(in srgb,var(--bg) 18%,transparent);min-width:0}
+.trust>div:last-child{border-right:0}
+.trust b{font-family:var(--display);font-weight:900;font-size:1.9rem;line-height:1;font-variant-numeric:tabular-nums}
+.trust span{font-size:.85rem;opacity:.8}
+/* Fill-in placeholders: replace with your real info before going live */
+.fill{background:color-mix(in srgb,var(--heat-mid) 35%,transparent);outline:1px dashed var(--heat-mid);border-radius:3px;padding:0 4px}
+
+/* Why us */
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.why>div{display:grid;gap:8px;align-content:start;min-width:0}
+.why .tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}
+.why p{color:var(--muted);font-size:.95rem}
+.safety{margin-top:36px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;display:grid;grid-template-columns:1fr 1.4fr;gap:28px;align-items:center}
+.safety>*{min-width:0}
+.safety table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.85rem;font-variant-numeric:tabular-nums}
+.safety th,.safety td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+.safety th{color:var(--muted);font-weight:500;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em}
+
+/* Reviews */
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.review{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:22px;display:grid;gap:12px;align-content:start;min-width:0}
+.review .stars{color:var(--accent);letter-spacing:2px}
+.review p{color:var(--muted);font-size:.95rem}
+.review .who{font-size:.85rem;font-weight:600}
+
+@media (max-width:860px){
+  .hero,.pricing,.safety{grid-template-columns:1fr}
+  .steps,.trust{grid-template-columns:repeat(2,1fr)}
+  .trust>div:nth-child(2){border-right:0}
+  .req,.why,.reviews{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .steps{grid-template-columns:1fr}
+  form{grid-template-columns:1fr;padding:20px}
+  nav ul{gap:14px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .ve td{transition:filter .2s}
+  .ve td:hover{filter:brightness(1.15)}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="brand">Drift <span>Labs</span></div>
+    <ul>
+      <li><a href="#why">Why Drift Labs</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#order">Order</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Professional NA &amp; NB Miata tuning · All 50 states</div>
+      <h1>Pro Megasquirt tuning, <em>wherever you are in the US.</em></h1>
+      <p class="lead">Drift Labs builds custom Megasquirt tunes for NA and NB Miatas, backed by a real shop and more than 10 years in the tuning business. You send your TunerStudio tune and datalogs. We send back a map built for your engine, mods and fuel, and refine it until it's right.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#order">Start your tune · $350</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="chips">
+        <span class="chip">1990–97 NA · B6 1.6 / BP 1.8</span>
+        <span class="chip">1999–05 NB · BP 1.8 / VVT</span>
+        <span class="chip">MS2 · MS3 · MSPNP</span>
+      </div>
+    </div>
+  </header>
+
+  <section id="why">
+    <div class="sec-head">
+      <div class="eyebrow">Why Drift Labs</div>
+      <h2>A real tuning shop, not a file in a folder</h2>
+      <p class="muted">Every Drift Labs tune is built for your exact car and checked against your own datalogs. No generic maps, no copy and paste.</p>
+    </div>
+    <div class="why">
+      <div><span class="tag">Experience</span><h3>Miata-only focus</h3><p>NA and NB Miatas on Megasquirt are all we tune. We know the B6 and BP engines, the common failure points, and how MSPNP units behave on these cars.</p></div>
+      <div><span class="tag">Real shop</span><h3>Backed by our shop in <span class="fill">[City, State]</span></h3><p>Drift Labs runs out of a working shop, so the same hands that tune cars in person build your remote tune.</p></div>
+      <div><span class="tag">Support</span><h3>You talk to your tuner</h3><p>Questions go straight to the person building your map. Clear answers, quick turnaround, and help reading your own logs.</p></div>
+    </div>
+    <div class="safety">
+      <div>
+        <h3>Engine safety comes first</h3>
+        <p class="muted" style="margin-top:8px">Every tune targets safe air/fuel ratios and conservative timing for your fuel. We review knock, coolant temps and AFRs on every log before we send a revision.</p>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Condition</th><th>Typical AFR target</th></tr></thead>
+          <tbody>
+            <tr><td>Idle &amp; cruise</td><td>14.7 : 1</td></tr>
+            <tr><td>NA wide open throttle</td><td>12.8 – 13.2 : 1</td></tr>
+            <tr><td>Boosted wide open throttle</td><td>11.5 – 12.0 : 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="sec-head">
+      <div class="eyebrow">How it works</div>
+      <h2>Four steps, done over email</h2>
+      <p class="muted">No shop visit and no trailer. You drive, log and send files. We do the tuning.</p>
+    </div>
+    <ol class="steps">
+      <li><h3>Order &amp; tell us about the car</h3><p>Fill out the order form with your year, engine, mods, fuel and goals.</p></li>
+      <li><h3>Send your files</h3><p>Email your current .msq tune and a datalog from TunerStudio. We'll show you exactly how to log.</p></li>
+      <li><h3>Get your base map</h3><p>We build a map for your setup: fuel, ignition, idle and warmup. You load it in TunerStudio.</p></li>
+      <li><h3>Drive, log, refine</h3><p>Send new logs and we send revisions until the AFRs land on target and it drives clean.</p></li>
+    </ol>
+  </section>
+
+  <section id="pricing">
+    <div class="sec-head">
+      <div class="eyebrow">Pricing</div>
+      <h2>One price for a complete tune</h2>
+    </div>
+    <div class="pricing">
+      <div class="plan">
+        <div>
+          <h3>Full Remote Tune</h3>
+          <p class="muted">Naturally aspirated or boosted NA/NB on Megasquirt</p>
+        </div>
+        <div class="price">$350 <small>one car, one setup</small></div>
+        <ul>
+          <li>Custom remote tune built to your request</li>
+          <li>Up to 4 revision rounds included</li>
+          <li>Email support through the whole process</li>
+        </ul>
+        <a class="btn btn-primary" href="#order">Order this tune</a>
+      </div>
+      <div class="extras">
+        <h3>Add-ons</h3>
+        <ul>
+          <li><span>Extra revision round</span><b>$50</b></li>
+          <li><span>Re-tune after new mods</span><b>$150</b></li>
+          <li><span>Boost / launch control setup</span><b>$75</b></li>
+        </ul>
+        <p class="note">Megasquirt ECU and wideband O2 sensor not included. Both are required.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <div class="sec-head">
+      <div class="eyebrow">Customer results</div>
+      <h2>What Drift Labs customers say</h2>
+      <p class="muted"><span class="fill">Replace these three cards with real customer reviews before going live.</span></p>
+    </div>
+    <div class="reviews">
+      <div class="review"><div class="stars">★★★★★</div><p class="fill">Real customer quote goes here.</p><div class="who"><span class="fill">Name · Car · State</span></div></div>
+      <div class="review"><div class="stars">★★★★★</div><p class="fill">Real customer quote goes here.</p><div class="who"><span class="fill">Name · Car · State</span></div></div>
+      <div class="review"><div class="stars">★★★★★</div><p class="fill">Real customer quote goes here.</p><div class="who"><span class="fill">Name · Car · State</span></div></div>
+    </div>
+  </section>
+
+  <section id="need">
+    <div class="sec-head">
+      <div class="eyebrow">Before you order</div>
+      <h2>What you'll need</h2>
+    </div>
+    <div class="req">
+      <div><h3>A Megasquirt ECU</h3><p>MS2, MS3, or a plug-and-play MSPNP unit, installed and able to start and idle the car.</p></div>
+      <div><h3>A wideband O2 sensor</h3><p>Wired into the ECU so your datalogs record real air/fuel ratios. Narrowband sensors can't be used to tune.</p></div>
+      <div><h3>A laptop with TunerStudio</h3><p>To load maps and record datalogs. The free version works. MS Registered is nicer to use.</p></div>
+    </div>
+  </section>
+
+  <section id="order">
+    <div class="sec-head">
+      <div class="eyebrow">Order</div>
+      <h2>Start your tune</h2>
+      <p class="muted">Tell us about your car, then pay securely through Stripe. Once your payment comes through, we'll email you how to send your tune file and datalog.</p>
+    </div>
+    <form id="orderForm" novalidate>
+      <div class="field"><label for="name">Your name</label><input id="name" required autocomplete="name"></div>
+      <div class="field"><label for="contact">Email or phone</label><input id="contact" required></div>
+      <div class="field">
+        <label for="gen">Car</label>
+        <select id="gen" required>
+          <option value="">Choose one</option>
+          <option>1990–93 NA 1.6 (B6)</option>
+          <option>1994–97 NA 1.8 (BP)</option>
+          <option>1999–00 NB1 1.8</option>
+          <option>2001–05 NB2 1.8 VVT</option>
+          <option>Mazdaspeed Miata (2004–05)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="ecu">ECU</label>
+        <select id="ecu" required>
+          <option value="">Choose one</option>
+          <option>MSPNP</option><option>MS2</option><option>MS3 / MS3Pro</option><option>Not sure</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="induction">Induction</label>
+        <select id="induction"><option>Naturally aspirated</option><option>Turbo</option><option>Supercharger</option></select>
+      </div>
+      <div class="field">
+        <label for="fuel">Fuel</label>
+        <select id="fuel"><option>91 octane</option><option>93 octane</option><option>E85 / flex</option><option>Other</option></select>
+      </div>
+      <div class="field full"><label for="mods">Mods (intake, exhaust, injectors, boost level, etc.)</label><textarea id="mods" placeholder="e.g. 440cc injectors, 4-2-1 header, 7 psi turbo, Innovate LC-2 wideband"></textarea></div>
+      <div class="field full"><label for="goals">What do you want from the tune?</label><textarea id="goals" placeholder="e.g. Smooth daily driver, better idle, safe AFRs for weekend autocross"></textarea></div>
+      <label class="check full field" for="agree"><input type="checkbox" id="agree"> I understand this tune is sold for off-road and competition use, and I have a working wideband.</label>
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit" id="submitBtn">Continue to payment</button>
+        <span class="err" id="err" hidden></span>
+      </div>
+      <div class="summary" id="summary" hidden>
+        <h3 id="summaryTitle">Your order summary</h3>
+        <p class="muted" id="sentMsg"></p>
+        <pre id="summaryText"></pre>
+        <div class="form-actions">
+          <a class="btn btn-primary" id="payBtn" href="#" target="_blank" rel="noopener">Pay $350 with Stripe</a>
+          <button class="btn btn-ghost" type="button" id="copyBtn">Copy summary</button>
+        </div>
+        <p class="note" id="copyMsg">Questions? Email <span class="email" id="emailText"></span>.</p>
+      </div>
+    </form>
+  </section>
+
+  <section id="faq">
+    <div class="sec-head">
+      <div class="eyebrow">FAQ</div>
+      <h2>Common questions</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Can you tune my stock ECU?</summary><p>No. NA and NB factory ECUs can't be reflashed the way newer cars can. You'll need a Megasquirt, and an MSPNP unit is the easiest swap since it plugs into the factory harness.</p></details>
+      <details><summary>How long does it take?</summary><p>Base maps usually go out within 3 business days of getting your files. Each revision usually takes 1 to 2 days. Most tunes are finished in 1 to 2 weeks, depending on how quickly you can drive and log.</p></details>
+      <details><summary>What if I add mods later?</summary><p>Bigger injectors, a new turbo or a big change in boost need a re-tune. Small bolt-ons often only need a revision round. Send us the details and we'll tell you which one you need.</p></details>
+      <details><summary>Do you offer refunds?</summary><p>If we haven't started your base map, you get a full refund. Once tuning work has started, the fee isn't refundable, but we'll keep working with you until the car runs right on the setup you ordered for.</p></details>
+      <details><summary>How do I pay?</summary><p>Checkout runs through Stripe, so you can pay with any major card, Apple Pay or Google Pay. Your card details go to Stripe and never touch this site.</p></details>
+      <details><summary>Is this street legal?</summary><p>Tunes are sold for off-road and competition use only. Check your state's emissions and inspection rules before driving a modified car on public roads.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="brand">Drift <span>Labs</span></div>
+    <p class="legal">Tunes are sold for off-road and competition use only. Engine tuning carries risk. Customer is responsible for verifying AFRs, knock and engine health, and for following local emissions laws. Mazda and Miata are trademarks of Mazda Motor Corporation. This business is not affiliated with Mazda.</p>
+  </footer>
+</div>
+
+<script>
+/* ===== YOUR SETTINGS: change these three lines ===== */
+var STRIPE_LINK = "https://buy.stripe.com/REPLACE_ME";  // Stripe Payment Link for the $350 tune
+var FORMSPREE_ID = "";                                     // e.g. "xyzabcd" from formspree.io (orders get emailed to you)
+var CONTACT_EMAIL = "yourname@example.com";                // your business email
+/* =================================================== */
+(function(){
+  document.getElementById('payBtn').href = STRIPE_LINK;
+  document.getElementById('emailText').textContent = CONTACT_EMAIL;
+  var f=document.getElementById('orderForm'), err=document.getElementById('err');
+  function val(id){return document.getElementById(id).value.trim()}
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var missing=[];
+    if(!val('name'))missing.push('your name');
+    if(!val('contact'))missing.push('an email or phone number');
+    if(!val('gen'))missing.push('your car');
+    if(!val('ecu'))missing.push('your ECU');
+    if(!document.getElementById('agree').checked)missing.push('the checkbox at the bottom');
+    if(missing.length){err.textContent='Please add '+missing.join(', ')+'.';err.hidden=false;return}
+    err.hidden=true;
+    var s='NEW TUNE ORDER — Full Remote Tune ($350)\n\n'+
+      'Name: '+val('name')+'\nContact: '+val('contact')+'\nCar: '+val('gen')+'\nECU: '+val('ecu')+
+      '\nInduction: '+val('induction')+'\nFuel: '+val('fuel')+
+      '\n\nMods:\n'+(val('mods')||'(none listed)')+'\n\nGoals:\n'+(val('goals')||'(none listed)')+
+      '\n\nAgreed to off-road/competition use terms: yes';
+    document.getElementById('summaryText').textContent=s;
+    var box=document.getElementById('summary'), sent=document.getElementById('sentMsg');
+    function show(){box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'nearest'})}
+    if(FORMSPREE_ID){
+      var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Sending…';
+      fetch('https://formspree.io/f/'+FORMSPREE_ID,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},
+        body:JSON.stringify({name:val('name'),contact:val('contact'),car:val('gen'),ecu:val('ecu'),induction:val('induction'),fuel:val('fuel'),mods:val('mods'),goals:val('goals'),_subject:'New tune order: '+val('gen')})})
+      .then(function(r){if(!r.ok)throw 0;sent.textContent='Got it. Your order details were sent. Last step: pay below to lock in your spot.'})
+      .catch(function(){sent.textContent='Your details could not be sent automatically. Copy the summary below and email it to '+CONTACT_EMAIL+', then pay below.'})
+      .then(function(){btn.disabled=false;btn.textContent='Continue to payment';show()});
+    } else {
+      sent.textContent='Copy this summary and email it to '+CONTACT_EMAIL+', then pay below.';
+      show();
+    }
+  });
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    var txt=document.getElementById('summaryText').textContent, msg=document.getElementById('copyMsg');
+    function fallback(){var r=document.createRange();r.selectNodeContents(document.getElementById('summaryText'));var sel=getSelection();sel.removeAllRanges();sel.addRange(r);msg.textContent='Selected. Press Ctrl+C to copy.'}
+    try{navigator.clipboard.writeText(txt).then(function(){msg.textContent='Copied. Paste it into an email to '+CONTACT_EMAIL+'.'},fallback)}catch(e){fallback()}
+  });
+})();
+</script>
+</body>
+</html>
