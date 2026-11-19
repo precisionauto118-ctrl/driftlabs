@@ -72,7 +72,8 @@ export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 
 ## Still to do
 
-- [ ] Create a Stripe account and make 3 Payment Links ($100, $200, $350). Paste them into the settings above.
+- [x] Stripe account created and 3 **sandbox (test)** Payment Links made and added (redirect back to portal.html after paying)
+- [ ] Finish Stripe business verification ("Verify your business"), then copy the 3 links to live mode and replace the test links in `settings.js`
 - [x] Set `CONTACT_EMAIL` (customers email files here)
 - [ ] Later, when busy: upgrade Firebase to Blaze for built-in file uploads (optional)
 - [ ] Add a privacy policy page (needed now that customers create accounts)

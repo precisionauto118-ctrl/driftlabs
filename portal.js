@@ -223,7 +223,8 @@ function openOrder(id) {
     $("odRevs").textContent = `${o.pkgName} · $${o.price} · ${left} of ${o.revisionsAllowed} revisions left`;
     $("payNotice").hidden = !!o.paid;
     if (!o.paid) {
-      $("payBtn").textContent = `Pay $${o.price} with Stripe`;
+      const testMode = STRIPE_LINKS[o.pkg].includes("/test_");
+      $("payBtn").textContent = testMode ? `Pay $${o.price} (test mode)` : `Pay $${o.price} with Stripe`;
       $("payBtn").href = STRIPE_LINKS[o.pkg] + "?client_reference_id=" + encodeURIComponent(o.id);
     }
     const trans = o.transmission === "Automatic"
