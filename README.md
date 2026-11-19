@@ -32,7 +32,7 @@ To change the site: edit `index.html` (on GitHub, click the file, then the penci
 - **Payments:** a Stripe Payment Link for each package. The customer pays on Stripe's checkout page.
 - **Order emails:** Formspree (optional, free) sends each order form to the business email.
 - **Hosting:** free on GitHub Pages now, custom domain later.
-- **Legal:** tunes are sold for off-road and competition use only. **No emissions deletes** (cat, EGR, DPF). **AFM/DFM (DOD) disable and delete-kit tunes are offered for GM trucks, racing use only.** This is stated in the FAQ, footer and order form checkbox. The footer says Drift Labs isn't affiliated with Mazda, GM, HP Tuners or Megasquirt. Don't use brand names in the business name.
+- **Legal:** tunes are sold for off-road and competition use only. **No emissions deletes** (cat, EGR, DPF). **AFM/DFM (DOD) disable and delete-kit tunes are offered for GM vehicles in general (cars, trucks, SUVs), racing use only.** This is stated in the FAQ, footer and order form checkbox. The footer says Drift Labs isn't affiliated with Mazda, GM, HP Tuners or Megasquirt. Don't use brand names in the business name.
 
 ## Settings to fill in
 
