@@ -5,7 +5,7 @@ import {
 import {
   collection, doc, addDoc, setDoc, updateDoc, query, where, orderBy, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { auth, db, $, esc, fmtDate, statusPill, friendlyAuthError, notify } from "./common.js";
+import { auth, db, $, esc, linkify, fmtDate, statusPill, friendlyAuthError, notify } from "./common.js";
 import { PACKAGES, STRIPE_LINKS } from "./settings.js";
 
 const views = ["loading", "authView", "verifyView", "homeView", "newView", "orderView"];
@@ -231,7 +231,7 @@ function openOrder(id) {
   unsubThread = onSnapshot(query(collection(ref, "messages"), orderBy("createdAt", "asc")), (snap) => {
     const msgs = snap.docs.map((d) => d.data());
     $("thread").innerHTML = msgs.length
-      ? msgs.map((m) => `<div class="msg ${m.from === "customer" ? "mine" : "theirs"}">${esc(m.text)}<span class="when">${m.from === "customer" ? "You" : "Drift Labs"} · ${fmtDate(m.createdAt)}</span></div>`).join("")
+      ? msgs.map((m) => `<div class="msg ${m.from === "customer" ? "mine" : "theirs"}">${linkify(m.text)}<span class="when">${m.from === "customer" ? "You" : "Drift Labs"} · ${fmtDate(m.createdAt)}</span></div>`).join("")
       : '<p class="muted small">No messages yet. Say hi, or ask how to send your files.</p>';
     $("thread").scrollTop = $("thread").scrollHeight;
   });

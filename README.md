@@ -36,7 +36,7 @@ To change the site: edit the file on GitHub (click it, then the pencil icon), th
 - **Security rules:** published in Firebase console > Firestore > Rules. They are **not** in this repo because they name the admin email. Customers can only see their own orders and messages. Only the admin account can see everything and change status, paid and revisions. The rules also check order prices.
 - **Admin:** open `admin.html` and sign in with Google using the admin account.
 - **Payments:** the portal's Pay button opens the package's Stripe link with `client_reference_id` set to the order ID. When Stripe emails you about a payment, open the order in the dashboard and check **Paid**.
-- **File storage:** not set up yet. It needs the Blaze plan (card on file; the free tier covers 5 GB). Until then, customers ask in messages how to send files.
+- **Files:** sent as Google Drive / Dropbox share links pasted into portal messages (links are clickable). Built-in uploads were skipped on purpose to stay on the free Spark plan; they need Blaze (card on file, $30 refundable prepayment at signup). Revisit once there are steady customers.
 
 ## Business decisions so far
 
@@ -74,7 +74,7 @@ export const CONTACT_EMAIL = "yourname@example.com";
 
 - [ ] Create a Stripe account and make 3 Payment Links ($100, $200, $350). Paste them into the settings above.
 - [ ] Set `CONTACT_EMAIL` to the business email
-- [ ] Upgrade Firebase to Blaze (set a $1 budget alert), then add file uploads to the portal
+- [ ] Later, when busy: upgrade Firebase to Blaze for built-in file uploads (optional)
 - [ ] Add a privacy policy page (needed now that customers create accounts)
 - [ ] Later: automatic "Paid" status from Stripe (needs Blaze and a small server function)
 - [ ] (Optional) Create a Formspree form and paste its ID into `FORMSPREE_ID`

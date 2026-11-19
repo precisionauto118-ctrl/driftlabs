@@ -15,6 +15,15 @@ export function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
+// Escape a message, then turn http(s) links into clickable links (for Drive/Dropbox file shares)
+export function linkify(s) {
+  return esc(s).replace(/https?:\/\/[^\s<]+/g, (url) => {
+    const clean = url.replace(/[.,!?)]+$/, "");
+    const tail = url.slice(clean.length);
+    return `<a href="${clean}" target="_blank" rel="noopener noreferrer">${clean}</a>${tail}`;
+  });
+}
+
 export function fmtDate(ts) {
   if (!ts) return "just now";
   const d = ts.toDate ? ts.toDate() : new Date(ts);

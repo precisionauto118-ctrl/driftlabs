@@ -2,7 +2,7 @@ import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from
 import {
   collection, doc, addDoc, updateDoc, query, orderBy, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { auth, db, $, esc, fmtDate, statusPill, friendlyAuthError } from "./common.js";
+import { auth, db, $, esc, linkify, fmtDate, statusPill, friendlyAuthError } from "./common.js";
 import { STATUSES } from "./settings.js";
 
 const views = ["loading", "authView", "deniedView", "listView", "orderView"];
@@ -115,7 +115,7 @@ function openOrder(id) {
   unsubThread = onSnapshot(query(collection(ref, "messages"), orderBy("createdAt", "asc")), (snap) => {
     const msgs = snap.docs.map((d) => d.data());
     $("thread").innerHTML = msgs.length
-      ? msgs.map((m) => `<div class="msg ${m.from === "admin" ? "mine" : "theirs"}">${esc(m.text)}<span class="when">${m.from === "admin" ? "You" : "Customer"} · ${fmtDate(m.createdAt)}</span></div>`).join("")
+      ? msgs.map((m) => `<div class="msg ${m.from === "admin" ? "mine" : "theirs"}">${linkify(m.text)}<span class="when">${m.from === "admin" ? "You" : "Customer"} · ${fmtDate(m.createdAt)}</span></div>`).join("")
       : '<p class="muted small">No messages yet.</p>';
     $("thread").scrollTop = $("thread").scrollHeight;
   });
