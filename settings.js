@@ -12,7 +12,7 @@ export const STRIPE_LINKS = {
 export const FORMSPREE_ID = "";
 
 // Public contact email shown to customers
-export const CONTACT_EMAIL = "yourname@example.com";
+export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 
 /* =================================================== */
 

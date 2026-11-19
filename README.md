@@ -67,13 +67,13 @@ export const STRIPE_LINKS = {
   custom: "https://buy.stripe.com/REPLACE_ME_CUSTOM"   // $350 Custom Tune
 };
 export const FORMSPREE_ID = "";                         // optional, for email alerts
-export const CONTACT_EMAIL = "yourname@example.com";
+export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 ```
 
 ## Still to do
 
 - [ ] Create a Stripe account and make 3 Payment Links ($100, $200, $350). Paste them into the settings above.
-- [ ] Set `CONTACT_EMAIL` to the business email
+- [x] Set `CONTACT_EMAIL` (customers email files here)
 - [ ] Later, when busy: upgrade Firebase to Blaze for built-in file uploads (optional)
 - [ ] Add a privacy policy page (needed now that customers create accounts)
 - [ ] Later: automatic "Paid" status from Stripe (needs Blaze and a small server function)
