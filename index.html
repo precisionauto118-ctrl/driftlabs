@@ -9,6 +9,7 @@
 <meta property="og:description" content="Remote Megasquirt and HP Tuners (GM) tuning anywhere in the US. 10+ years in the tuning business. Tunes from $100.">
 <style>[hidden]{display:none!important}body{margin:0}img{max-width:100%}</style>
 <title>Drift Labs | Professional Remote Megasquirt &amp; HP Tuners Tuning</title>
+<title>Drift Labs | Professional Remote Megasquirt &amp; HP Tuners Tuning</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -398,7 +399,37 @@ footer .legal{max-width:80ch}
         <label for="fuel">Fuel</label>
         <select id="fuel"><option>91 octane</option><option>93 octane</option><option>E85 / flex</option><option>Other</option></select>
       </div>
-      <div class="field full"><label for="mods">Mods (intake, exhaust, cam, injectors, boost level, etc.)</label><textarea id="mods" placeholder="e.g. Long tube headers, cam, 42 lb injectors, cold air intake"></textarea></div>
+      <div class="field">
+        <label for="trans">Transmission</label>
+        <select id="trans" required>
+          <option value="">Choose one</option>
+          <option>Automatic</option>
+          <option>Manual</option>
+        </select>
+      </div>
+      <div class="field" id="transModelField" hidden>
+        <label for="transModel">Automatic transmission</label>
+        <select id="transModel">
+          <option value="">Choose one</option>
+          <option>4L60E</option><option>4L65E</option><option>4L70E</option><option>4L80E</option>
+          <option>6L80</option><option>6L90</option><option>8L90</option><option>10L80</option><option>10L90</option>
+          <option>Other / not sure</option>
+        </select>
+      </div>
+      <div class="field" id="converterField" hidden>
+        <label for="converter">Torque converter</label>
+        <select id="converter">
+          <option value="">Choose one</option>
+          <option>Stock converter</option>
+          <option>Aftermarket converter</option>
+        </select>
+      </div>
+      <div class="field" id="converterDetailField" hidden>
+        <label for="converterDetail">Converter brand and stall speed</label>
+        <input id="converterDetail" placeholder="e.g. Circle D 3200 stall, Yank SS 3600">
+      </div>
+      <div class="field full"><label for="cam">Cam specs (if cammed)</label><input id="cam" placeholder="e.g. Texas Speed Stage 2: 220/236 duration, .600/.600 lift, 112+2 LSA"></div>
+      <div class="field full"><label for="mods">Other mods (intake, exhaust, headers, injectors, boost level, etc.)</label><textarea id="mods" placeholder="e.g. Long tube headers, cam, 42 lb injectors, cold air intake"></textarea></div>
       <div class="field full"><label for="goals">What do you want from the tune?</label><textarea id="goals" placeholder="e.g. Smooth daily driver, firmer shifts, safe power for weekend track days"></textarea></div>
       <label class="check full field" for="agree"><input type="checkbox" id="agree"> I understand tunes are sold for off-road and competition use, and that Drift Labs does not remove or disable emissions equipment.</label>
       <div class="form-actions">
@@ -461,6 +492,23 @@ var CONTACT_EMAIL = "yourname@example.com";                            // your b
 
   var f=document.getElementById('orderForm'), err=document.getElementById('err');
   function val(id){return document.getElementById(id).value.trim()}
+
+  // Show automatic transmission and converter questions only when needed
+  function el(id){return document.getElementById(id)}
+  function syncTrans(){
+    var auto=val('trans')==='Automatic';
+    el('transModelField').hidden=!auto;
+    el('converterField').hidden=!auto;
+    el('converterDetailField').hidden=!(auto&&val('converter')==='Aftermarket converter');
+  }
+  el('trans').addEventListener('change',syncTrans);
+  el('converter').addEventListener('change',syncTrans);
+  syncTrans();
+  function transText(){
+    if(val('trans')!=='Automatic')return val('trans');
+    var c=val('converter')==='Aftermarket converter'?('Aftermarket converter: '+(val('converterDetail')||'(details not listed)')):val('converter');
+    return 'Automatic '+val('transModel')+'\nConverter: '+c;
+  }
   f.addEventListener('submit',function(e){
     e.preventDefault();
     var missing=[];
@@ -469,6 +517,11 @@ var CONTACT_EMAIL = "yourname@example.com";                            // your b
     if(!val('platform'))missing.push('a platform');
     if(!val('pkg'))missing.push('a package');
     if(!val('vehicle'))missing.push('your vehicle');
+    if(!val('trans'))missing.push('your transmission');
+    if(val('trans')==='Automatic'){
+      if(!val('transModel'))missing.push('which automatic transmission');
+      if(!val('converter'))missing.push('your torque converter');
+    }
     if(!document.getElementById('agree').checked)missing.push('the checkbox at the bottom');
     if(missing.length){err.textContent='Please add '+missing.join(', ')+'.';err.hidden=false;return}
     err.hidden=true;
@@ -479,7 +532,9 @@ var CONTACT_EMAIL = "yourname@example.com";                            // your b
       'Name: '+val('name')+'\nContact: '+val('contact')+'\nPlatform: '+val('platform')+
       '\nVehicle: '+val('vehicle')+'\nEngine: '+(val('engine')||'(not listed)')+
       '\nInduction: '+val('induction')+'\nFuel: '+val('fuel')+
-      '\n\nMods:\n'+(val('mods')||'(none listed)')+'\n\nGoals:\n'+(val('goals')||'(none listed)')+
+      '\nTransmission: '+transText()+
+      '\nCam: '+(val('cam')||'(stock / not listed)')+
+      '\n\nOther mods:\n'+(val('mods')||'(none listed)')+'\n\nGoals:\n'+(val('goals')||'(none listed)')+
       '\n\nAgreed to off-road/competition use and no-emissions-delete terms: yes';
     document.getElementById('summaryText').textContent=s;
     var box=document.getElementById('summary'), sent=document.getElementById('sentMsg');
@@ -487,7 +542,7 @@ var CONTACT_EMAIL = "yourname@example.com";                            // your b
     if(FORMSPREE_ID){
       var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Sending…';
       fetch('https://formspree.io/f/'+FORMSPREE_ID,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},
-        body:JSON.stringify({package:p.name+' ($'+p.price+')',name:val('name'),contact:val('contact'),platform:val('platform'),vehicle:val('vehicle'),engine:val('engine'),induction:val('induction'),fuel:val('fuel'),mods:val('mods'),goals:val('goals'),_subject:'New '+p.name+' order: '+val('vehicle')})})
+        body:JSON.stringify({package:p.name+' ($'+p.price+')',name:val('name'),contact:val('contact'),platform:val('platform'),vehicle:val('vehicle'),engine:val('engine'),induction:val('induction'),fuel:val('fuel'),transmission:transText(),cam:val('cam'),mods:val('mods'),goals:val('goals'),_subject:'New '+p.name+' order: '+val('vehicle')})})
       .then(function(r){if(!r.ok)throw 0;sent.textContent='Got it. Your order details were sent. Last step: pay below to lock in your spot.'})
       .catch(function(){sent.textContent='Your details could not be sent automatically. Copy the summary below and email it to '+CONTACT_EMAIL+', then pay below.'})
       .then(function(){btn.disabled=false;btn.textContent='Continue to payment';show()});
