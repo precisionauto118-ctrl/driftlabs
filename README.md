@@ -5,18 +5,38 @@ Website for **Drift Labs**, a remote ECU tuning business that serves the whole U
 - **Megasquirt** (MS2, MS3, MS3Pro, MSPNP) with **TunerStudio**, for any vehicle running Megasquirt. NA and NB Miatas are the specialty.
 - **HP Tuners** (VCM Suite) for **GM cars and trucks**: Corvette, Camaro, Silverado, Sierra, Tahoe and more.
 
-Customers order online, pay through Stripe, send their files and datalogs by email, and get a custom tune back.
+Customers create an account (any email, or Google), order and pay in their own portal, message the tuner, and track revisions. The tuner manages everything from an admin dashboard.
 
 Live site: https://precisionauto118-ctrl.github.io/driftlabs/
+Customer portal: https://precisionauto118-ctrl.github.io/driftlabs/portal.html
+Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
 
 ## Files
 
 | File | What it is |
 |---|---|
-| `index.html` | **The website.** GitHub Pages serves this file. |
+| `index.html` | Homepage. Order buttons send customers to the portal. |
+| `portal.html` / `portal.js` | Customer portal: sign in or sign up, order a tune, pay, message the tuner, track status and revisions. |
+| `admin.html` / `admin.js` | Admin dashboard: every order, filters, replies, status, "Paid" checkbox, revision counter. Only the admin account can open it. |
+| `common.js` | Shared Firebase setup and helpers. |
+| `settings.js` | **Your settings:** Stripe links, Formspree ID, contact email, packages, statuses. |
+| `firebase-config.js` | Firebase web config (public values, not secrets). |
+| `portal.css` | Styles for the portal and admin pages. |
 | `README.md` | This file. |
 
-To change the site: edit `index.html` (on GitHub, click the file, then the pencil icon), then commit. The live site updates in about a minute.
+To change the site: edit the file on GitHub (click it, then the pencil icon), then commit. The live site updates in about a minute.
+
+## Backend: Firebase project `driftlabstuning`
+
+- **Sign-in:** Email/Password (any email, with email verification) and Google. Authorized domain: `precisionauto118-ctrl.github.io`. Add the custom domain there later.
+- **Database:** Cloud Firestore, `nam5 (United States)`, production mode.
+  - `users/{uid}`: name, email
+  - `orders/{orderId}`: customer, package, price, vehicle details, `status`, `paid`, `revisionsAllowed`, `revisionsUsed`, unread flags
+  - `orders/{orderId}/messages/{id}`: `from` (customer/admin), text, time
+- **Security rules:** published in Firebase console > Firestore > Rules. They are **not** in this repo because they name the admin email. Customers can only see their own orders and messages. Only the admin account can see everything and change status, paid and revisions. The rules also check order prices.
+- **Admin:** open `admin.html` and sign in with Google using the admin account.
+- **Payments:** the portal's Pay button opens the package's Stripe link with `client_reference_id` set to the order ID. When Stripe emails you about a payment, open the order in the dashboard and check **Paid**.
+- **File storage:** not set up yet. It needs the Blaze plan (card on file; the free tier covers 5 GB). Until then, customers ask in messages how to send files.
 
 ## Business decisions so far
 
@@ -32,26 +52,31 @@ To change the site: edit `index.html` (on GitHub, click the file, then the penci
 - **Add-ons:** extra revision round $50, re-tune after new mods $150, boost/launch control setup $75.
 - **Refunds:** none. All purchases are final (FAQ, footer and order checkbox).
 - **Payments:** a Stripe Payment Link for each package. The customer pays on Stripe's checkout page.
-- **Order emails:** Formspree (optional, free) sends each order form to the business email.
+- **Order emails:** an optional Formspree ID sends you an email for each new order and customer message.
 - **Hosting:** free on GitHub Pages now, custom domain later.
 - **Legal:** tunes are sold for off-road and competition use only. **No emissions deletes** (cat, EGR, DPF). **AFM/DFM (DOD) disable and delete-kit tunes are offered for GM vehicles in general (cars, trucks, SUVs), racing use only.** This is stated in the FAQ, footer and order form checkbox. The footer says Drift Labs isn't affiliated with Mazda, GM, HP Tuners or Megasquirt. Don't use brand names in the business name.
 
 ## Settings to fill in
 
-At the top of the `<script>` near the bottom of `index.html`:
+In `settings.js`:
 
 ```js
-var STRIPE_BASE_LINK   = "https://buy.stripe.com/REPLACE_ME_BASE";    // $100 Base Tune
-var STRIPE_DAILY_LINK  = "https://buy.stripe.com/REPLACE_ME_DAILY";   // $200 Daily Tune
-var STRIPE_CUSTOM_LINK = "https://buy.stripe.com/REPLACE_ME_CUSTOM";  // $350 Custom Tune
-var FORMSPREE_ID = "";                                                 // e.g. "xyzabcd" from formspree.io
-var CONTACT_EMAIL = "yourname@example.com";                            // business email
+export const STRIPE_LINKS = {
+  base:   "https://buy.stripe.com/REPLACE_ME_BASE",    // $100 Base Tune
+  daily:  "https://buy.stripe.com/REPLACE_ME_DAILY",   // $200 Daily Tune
+  custom: "https://buy.stripe.com/REPLACE_ME_CUSTOM"   // $350 Custom Tune
+};
+export const FORMSPREE_ID = "";                         // optional, for email alerts
+export const CONTACT_EMAIL = "yourname@example.com";
 ```
 
 ## Still to do
 
 - [ ] Create a Stripe account and make 3 Payment Links ($100, $200, $350). Paste them into the settings above.
 - [ ] Set `CONTACT_EMAIL` to the business email
+- [ ] Upgrade Firebase to Blaze (set a $1 budget alert), then add file uploads to the portal
+- [ ] Add a privacy policy page (needed now that customers create accounts)
+- [ ] Later: automatic "Paid" status from Stripe (needs Blaze and a small server function)
 - [ ] (Optional) Create a Formspree form and paste its ID into `FORMSPREE_ID`
 - [ ] Fill in the yellow highlighted placeholders (search the file for `class="fill"`):
   - [ ] 3 real customer reviews, used with permission (never made up)

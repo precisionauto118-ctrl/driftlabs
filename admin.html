@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Admin | Drift Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="./">Drift <span>Labs</span> <span class="muted small" style="color:var(--muted)">Admin</span></a>
+    <div class="nav-right">
+      <span id="whoami" class="muted small" hidden></span>
+      <button class="btn btn-ghost" id="signOutBtn" hidden>Sign out</button>
+    </div>
+  </nav>
+
+  <p id="loading" class="muted">Loading…</p>
+
+  <section id="authView" class="auth" hidden>
+    <div class="card stack">
+      <h2>Admin sign in</h2>
+      <button class="btn google" id="googleBtn" type="button">Continue with Google</button>
+      <p class="err" id="authErr" hidden></p>
+    </div>
+  </section>
+
+  <section id="deniedView" class="auth" hidden>
+    <div class="card stack">
+      <h2>Not an admin account</h2>
+      <p class="muted">You're signed in as <b id="deniedEmail"></b>, which doesn't have admin access. Sign out and use the admin account.</p>
+      <a class="btn btn-ghost" href="portal.html">Go to the customer portal</a>
+    </div>
+  </section>
+
+  <section id="listView" class="stack" hidden>
+    <div class="spread">
+      <div class="stack" style="gap:6px"><div class="eyebrow">Dashboard</div><h1>Orders</h1></div>
+      <p class="muted small" id="counts"></p>
+    </div>
+    <div class="toolbar" role="group" aria-label="Filter orders">
+      <button type="button" data-filter="attention" aria-pressed="true">Needs attention</button>
+      <button type="button" data-filter="unpaid" aria-pressed="false">Unpaid</button>
+      <button type="button" data-filter="active" aria-pressed="false">Active</button>
+      <button type="button" data-filter="complete" aria-pressed="false">Complete</button>
+      <button type="button" data-filter="all" aria-pressed="false">All</button>
+    </div>
+    <div class="orders" id="ordersList"></div>
+    <div class="card empty" id="ordersEmpty" hidden><h2>Nothing here</h2><p class="muted">No orders match this filter.</p></div>
+  </section>
+
+  <section id="orderView" class="stack" hidden>
+    <button class="btn-link btn small" type="button" id="backBtn" style="justify-self:start">← All orders</button>
+    <div class="spread">
+      <div class="stack" style="gap:6px"><div class="eyebrow" id="odNumber"></div><h1 id="odTitle"></h1></div>
+      <div id="odStatusPill"></div>
+    </div>
+    <div class="detail">
+      <div class="card stack">
+        <h2>Messages</h2>
+        <div class="thread" id="thread" aria-live="polite"></div>
+        <form class="composer" id="msgForm" novalidate>
+          <label for="msgText" class="small">Reply to customer</label>
+          <textarea id="msgText"></textarea>
+          <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="err" id="msgErr" hidden></span></div>
+        </form>
+      </div>
+      <div class="stack">
+        <div class="card stack">
+          <h2>Manage</h2>
+          <div class="field">
+            <label for="statusSel">Status</label>
+            <select id="statusSel"></select>
+          </div>
+          <label class="check" for="paidChk"><input type="checkbox" id="paidChk"> Paid (check after the Stripe payment email arrives)</label>
+          <div class="field">
+            <label>Revisions used</label>
+            <div class="row">
+              <button class="btn btn-ghost" type="button" id="revMinus" aria-label="One fewer revision">−</button>
+              <span class="revs" id="revCount"></span>
+              <button class="btn btn-ghost" type="button" id="revPlus" aria-label="One more revision">+</button>
+            </div>
+          </div>
+          <p class="ok" id="saveOk" hidden></p>
+          <p class="err" id="saveErr" hidden></p>
+        </div>
+        <div class="card stack">
+          <h2>Customer &amp; vehicle</h2>
+          <dl class="facts" id="odFacts"></dl>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="module" src="admin.js"></script>
+</body>
+</html>

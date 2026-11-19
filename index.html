@@ -173,7 +173,7 @@ footer .legal{max-width:80ch}
       <li><a href="#why">Why Drift Labs</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#faq">FAQ</a></li>
-      <li><a href="#order">Order</a></li>
+      <li><a href="portal.html">Customer login</a></li>
     </ul>
   </nav>
 
@@ -269,7 +269,7 @@ footer .legal{max-width:80ch}
           <li>1 revision round included</li>
           <li>Email support</li>
         </ul>
-        <a class="btn btn-ghost" href="#order" data-pkg="base">Order Base Tune</a>
+        <a class="btn btn-ghost" href="portal.html?pkg=base#new">Order Base Tune</a>
       </div>
       <div class="plan">
         <div><h3>Daily Tune</h3><p class="muted">For street cars and trucks with bolt-ons</p></div>
@@ -280,7 +280,7 @@ footer .legal{max-width:80ch}
           <li>2 revision rounds included</li>
           <li>Email support</li>
         </ul>
-        <a class="btn btn-ghost" href="#order" data-pkg="daily">Order Daily Tune</a>
+        <a class="btn btn-ghost" href="portal.html?pkg=daily#new">Order Daily Tune</a>
       </div>
       <div class="plan featured">
         <span class="badge">Most popular</span>
@@ -291,7 +291,7 @@ footer .legal{max-width:80ch}
           <li>Up to 4 revision rounds included</li>
           <li>Email support through the whole process</li>
         </ul>
-        <a class="btn btn-primary" href="#order" data-pkg="custom">Order Custom Tune</a>
+        <a class="btn btn-primary" href="portal.html?pkg=custom#new">Order Custom Tune</a>
       </div>
     </div>
     <div class="below">
@@ -349,88 +349,29 @@ footer .legal{max-width:80ch}
   <section id="order">
     <div class="sec-head">
       <div class="eyebrow">Order</div>
-      <h2>Start your tune</h2>
-      <p class="muted">Tell us about your vehicle, then pay securely through Stripe. Once your payment comes through, we'll email you how to send your files.</p>
+      <h2>Start your tune in your own portal</h2>
+      <p class="muted">Create a free account with any email, or sign in with Google. Your portal keeps every order, message and revision in one place.</p>
     </div>
-    <form id="orderForm" novalidate>
-      <div class="field"><label for="name">Your name</label><input id="name" required autocomplete="name"></div>
-      <div class="field"><label for="contact">Email or phone</label><input id="contact" required></div>
-      <div class="field">
-        <label for="platform">Platform</label>
-        <select id="platform" required>
-          <option value="">Choose one</option>
-          <option>Megasquirt</option>
-          <option>HP Tuners (GM)</option>
-          <option>Not sure</option>
-        </select>
+    <div class="services">
+      <div class="service">
+        <div class="tool">Your Drift Labs portal</div>
+        <h3>Everything for your tune, in one place</h3>
+        <ul>
+          <li>Order and pay for your tune</li>
+          <li>Message your tuner directly</li>
+          <li>Track status and revisions left</li>
+          <li>Every order saved in your account</li>
+        </ul>
       </div>
-      <div class="field">
-        <label for="pkg">Package</label>
-        <select id="pkg" required>
-          <option value="">Choose one</option>
-          <option value="base">Base Tune · $100</option>
-          <option value="daily">Daily Tune · $200</option>
-          <option value="custom">Custom Tune · $350</option>
-        </select>
-      </div>
-      <div class="field"><label for="vehicle">Year, make and model</label><input id="vehicle" required placeholder="e.g. 1994 Mazda Miata, 2008 Corvette, 2017 Silverado"></div>
-      <div class="field"><label for="engine">Engine</label><input id="engine" placeholder="e.g. BP 1.8, LS3 6.2, L83 5.3"></div>
-      <div class="field">
-        <label for="induction">Induction</label>
-        <select id="induction"><option>Naturally aspirated</option><option>Turbo</option><option>Supercharger</option></select>
-      </div>
-      <div class="field">
-        <label for="fuel">Fuel</label>
-        <select id="fuel"><option>91 octane</option><option>93 octane</option><option>E85 / flex</option><option>Other</option></select>
-      </div>
-      <div class="field">
-        <label for="trans">Transmission</label>
-        <select id="trans" required>
-          <option value="">Choose one</option>
-          <option>Automatic</option>
-          <option>Manual</option>
-        </select>
-      </div>
-      <div class="field" id="transModelField" hidden>
-        <label for="transModel">Automatic transmission</label>
-        <select id="transModel">
-          <option value="">Choose one</option>
-          <option>4L60E</option><option>4L65E</option><option>4L70E</option><option>4L80E</option>
-          <option>6L80</option><option>6L90</option><option>8L90</option><option>10L80</option><option>10L90</option>
-          <option>Other / not sure</option>
-        </select>
-      </div>
-      <div class="field" id="converterField" hidden>
-        <label for="converter">Torque converter</label>
-        <select id="converter">
-          <option value="">Choose one</option>
-          <option>Stock converter</option>
-          <option>Aftermarket converter</option>
-        </select>
-      </div>
-      <div class="field" id="converterDetailField" hidden>
-        <label for="converterDetail">Converter brand and stall speed</label>
-        <input id="converterDetail" placeholder="e.g. Circle D 3200 stall, Yank SS 3600">
-      </div>
-      <div class="field full"><label for="cam">Cam specs (if cammed)</label><input id="cam" placeholder="e.g. Texas Speed Stage 2: 220/236 duration, .600/.600 lift, 112+2 LSA"></div>
-      <div class="field full"><label for="mods">Other mods (intake, exhaust, headers, injectors, boost level, etc.)</label><textarea id="mods" placeholder="e.g. Long tube headers, cam, 42 lb injectors, cold air intake"></textarea></div>
-      <div class="field full"><label for="goals">What do you want from the tune?</label><textarea id="goals" placeholder="e.g. Smooth daily driver, firmer shifts, safe power for weekend track days"></textarea></div>
-      <label class="check full field" for="agree"><input type="checkbox" id="agree"> I understand tunes are sold for off-road and competition use, and that Drift Labs does not remove or disable emissions equipment (catalytic converters, EGR or DPF). I understand all purchases are final and non-refundable.</label>
-      <div class="form-actions">
-        <button class="btn btn-primary" type="submit" id="submitBtn">Continue to payment</button>
-        <span class="err" id="err" hidden></span>
-      </div>
-      <div class="summary" id="summary" hidden>
-        <h3>Your order summary</h3>
-        <p class="muted" id="sentMsg"></p>
-        <pre id="summaryText"></pre>
-        <div class="form-actions">
-          <a class="btn btn-primary" id="payBtn" href="#" target="_blank" rel="noopener">Pay with Stripe</a>
-          <button class="btn btn-ghost" type="button" id="copyBtn">Copy summary</button>
+      <div class="service" style="align-content:center;justify-items:start">
+        <h3>Ready to get started?</h3>
+        <p>Takes about a minute. Works with Gmail, Yahoo, Outlook, iCloud or any other email.</p>
+        <div class="cta-row" style="margin-top:4px">
+          <a class="btn btn-primary" href="portal.html#new">Create account &amp; order</a>
+          <a class="btn btn-ghost" href="portal.html">Sign in</a>
         </div>
-        <p class="note" id="copyMsg">Questions? Email <span class="email" id="emailText"></span>.</p>
       </div>
-    </form>
+    </div>
   </section>
 
   <section id="faq">
@@ -458,90 +399,5 @@ footer .legal{max-width:80ch}
   </footer>
 </div>
 
-<script>
-/* ===== YOUR SETTINGS: change these lines ===== */
-var STRIPE_BASE_LINK   = "https://buy.stripe.com/REPLACE_ME_BASE";    // Stripe Payment Link for the $100 Base Tune
-var STRIPE_DAILY_LINK  = "https://buy.stripe.com/REPLACE_ME_DAILY";   // Stripe Payment Link for the $200 Daily Tune
-var STRIPE_CUSTOM_LINK = "https://buy.stripe.com/REPLACE_ME_CUSTOM";  // Stripe Payment Link for the $350 Custom Tune
-var FORMSPREE_ID = "";                                                 // e.g. "xyzabcd" from formspree.io (orders get emailed to you)
-var CONTACT_EMAIL = "yourname@example.com";                            // your business email
-/* ============================================= */
-(function(){
-  var PKGS={base:{name:'Base Tune',price:100,link:STRIPE_BASE_LINK},daily:{name:'Daily Tune',price:200,link:STRIPE_DAILY_LINK},custom:{name:'Custom Tune',price:350,link:STRIPE_CUSTOM_LINK}};
-  document.getElementById('emailText').textContent = CONTACT_EMAIL;
-
-  // Pricing buttons preselect the package
-  document.querySelectorAll('[data-pkg]').forEach(function(a){
-    a.addEventListener('click',function(){document.getElementById('pkg').value=a.getAttribute('data-pkg')});
-  });
-
-  var f=document.getElementById('orderForm'), err=document.getElementById('err');
-  function val(id){return document.getElementById(id).value.trim()}
-
-  // Show automatic transmission and converter questions only when needed
-  function el(id){return document.getElementById(id)}
-  function syncTrans(){
-    var auto=val('trans')==='Automatic';
-    el('transModelField').hidden=!auto;
-    el('converterField').hidden=!auto;
-    el('converterDetailField').hidden=!(auto&&val('converter')==='Aftermarket converter');
-  }
-  el('trans').addEventListener('change',syncTrans);
-  el('converter').addEventListener('change',syncTrans);
-  syncTrans();
-  function transText(){
-    if(val('trans')!=='Automatic')return val('trans');
-    var c=val('converter')==='Aftermarket converter'?('Aftermarket converter: '+(val('converterDetail')||'(details not listed)')):val('converter');
-    return 'Automatic '+val('transModel')+'\nConverter: '+c;
-  }
-  f.addEventListener('submit',function(e){
-    e.preventDefault();
-    var missing=[];
-    if(!val('name'))missing.push('your name');
-    if(!val('contact'))missing.push('an email or phone number');
-    if(!val('platform'))missing.push('a platform');
-    if(!val('pkg'))missing.push('a package');
-    if(!val('vehicle'))missing.push('your vehicle');
-    if(!val('trans'))missing.push('your transmission');
-    if(val('trans')==='Automatic'){
-      if(!val('transModel'))missing.push('which automatic transmission');
-      if(!val('converter'))missing.push('your torque converter');
-    }
-    if(!document.getElementById('agree').checked)missing.push('the checkbox at the bottom');
-    if(missing.length){err.textContent='Please add '+missing.join(', ')+'.';err.hidden=false;return}
-    err.hidden=true;
-    var p=PKGS[val('pkg')];
-    var pay=document.getElementById('payBtn');
-    pay.href=p.link; pay.textContent='Pay $'+p.price+' with Stripe';
-    var s='NEW TUNE ORDER — '+p.name+' ($'+p.price+')\n\n'+
-      'Name: '+val('name')+'\nContact: '+val('contact')+'\nPlatform: '+val('platform')+
-      '\nVehicle: '+val('vehicle')+'\nEngine: '+(val('engine')||'(not listed)')+
-      '\nInduction: '+val('induction')+'\nFuel: '+val('fuel')+
-      '\nTransmission: '+transText()+
-      '\nCam: '+(val('cam')||'(stock / not listed)')+
-      '\n\nOther mods:\n'+(val('mods')||'(none listed)')+'\n\nGoals:\n'+(val('goals')||'(none listed)')+
-      '\n\nAgreed to off-road/competition use, no-emissions-delete and all-sales-final terms: yes';
-    document.getElementById('summaryText').textContent=s;
-    var box=document.getElementById('summary'), sent=document.getElementById('sentMsg');
-    function show(){box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'nearest'})}
-    if(FORMSPREE_ID){
-      var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Sending…';
-      fetch('https://formspree.io/f/'+FORMSPREE_ID,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},
-        body:JSON.stringify({package:p.name+' ($'+p.price+')',name:val('name'),contact:val('contact'),platform:val('platform'),vehicle:val('vehicle'),engine:val('engine'),induction:val('induction'),fuel:val('fuel'),transmission:transText(),cam:val('cam'),mods:val('mods'),goals:val('goals'),_subject:'New '+p.name+' order: '+val('vehicle')})})
-      .then(function(r){if(!r.ok)throw 0;sent.textContent='Got it. Your order details were sent. Last step: pay below to lock in your spot.'})
-      .catch(function(){sent.textContent='Your details could not be sent automatically. Copy the summary below and email it to '+CONTACT_EMAIL+', then pay below.'})
-      .then(function(){btn.disabled=false;btn.textContent='Continue to payment';show()});
-    } else {
-      sent.textContent='Copy this summary and email it to '+CONTACT_EMAIL+', then pay below.';
-      show();
-    }
-  });
-  document.getElementById('copyBtn').addEventListener('click',function(){
-    var txt=document.getElementById('summaryText').textContent, msg=document.getElementById('copyMsg');
-    function fallback(){var r=document.createRange();r.selectNodeContents(document.getElementById('summaryText'));var sel=getSelection();sel.removeAllRanges();sel.addRange(r);msg.textContent='Selected. Press Ctrl+C to copy.'}
-    try{navigator.clipboard.writeText(txt).then(function(){msg.textContent='Copied. Paste it into an email to '+CONTACT_EMAIL+'.'},fallback)}catch(e){fallback()}
-  });
-})();
-</script>
 </body>
 </html>
