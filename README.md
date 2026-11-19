@@ -21,8 +21,9 @@ To change the site: edit `index.html` (on GitHub, click the file, then the penci
 ## Business decisions so far
 
 - **Name:** Drift Labs. No car tuning company uses it. A crypto company and a small NZ software studio use "Drift Labs", so different industries. "RaceLabs" was rejected because a dyno tuning shop in Indiana uses "RaceLab".
-- **Experience:** 10+ years in the tuning business, including Corvettes and Silverados on HP Tuners. Real shop backs the business.
+- **Experience:** 10+ years in the tuning business, including Corvettes and Silverados on HP Tuners. The site does not name a shop or location on purpose, so it reads as a nationwide business.
 - **Market:** US-wide, all 50 states.
+- **Turnaround:** tunes and revisions usually go out within a few hours ("Same-day tunes").
 - **Pricing** (same for Megasquirt and HP Tuners):
   - **Base Tune, $100:** base tune to get started and running right, 1 revision round, email support
   - **Daily Tune, $200:** smooth, reliable daily driving (idle, cold start, part throttle), 2 revision rounds, email support
@@ -53,7 +54,6 @@ var CONTACT_EMAIL = "yourname@example.com";                            // busine
 - [ ] Set `CONTACT_EMAIL` to the business email
 - [ ] (Optional) Create a Formspree form and paste its ID into `FORMSPREE_ID`
 - [ ] Fill in the yellow highlighted placeholders (search the file for `class="fill"`):
-  - [ ] Shop city and state ("Why Drift Labs" section)
   - [ ] 3 real customer reviews, used with permission (never made up)
 - [ ] Once nothing is left to fill in, delete the `.fill` style rule so no yellow highlights remain
 - [ ] Grab social handles (Facebook, Instagram) for Drift Labs
@@ -67,4 +67,4 @@ var CONTACT_EMAIL = "yourname@example.com";                            // busine
 - Megasquirt: msextra.com forums, r/Megasquirt
 - GM: LS1Tech, CorvetteForum, GM-Trucks.com, r/Corvette, r/Silverado
 - Post dyno sheets and before/after logs as proof of results
-- Set up a Google Business Profile for the shop
+- (Optional) Google Business Profile set up as an online service business without a public address
