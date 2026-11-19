@@ -415,7 +415,7 @@ footer .legal{max-width:80ch}
       <div class="field full"><label for="cam">Cam specs (if cammed)</label><input id="cam" placeholder="e.g. Texas Speed Stage 2: 220/236 duration, .600/.600 lift, 112+2 LSA"></div>
       <div class="field full"><label for="mods">Other mods (intake, exhaust, headers, injectors, boost level, etc.)</label><textarea id="mods" placeholder="e.g. Long tube headers, cam, 42 lb injectors, cold air intake"></textarea></div>
       <div class="field full"><label for="goals">What do you want from the tune?</label><textarea id="goals" placeholder="e.g. Smooth daily driver, firmer shifts, safe power for weekend track days"></textarea></div>
-      <label class="check full field" for="agree"><input type="checkbox" id="agree"> I understand tunes are sold for off-road and competition use, and that Drift Labs does not remove or disable emissions equipment (catalytic converters, EGR or DPF).</label>
+      <label class="check full field" for="agree"><input type="checkbox" id="agree"> I understand tunes are sold for off-road and competition use, and that Drift Labs does not remove or disable emissions equipment (catalytic converters, EGR or DPF). I understand all purchases are final and non-refundable.</label>
       <div class="form-actions">
         <button class="btn btn-primary" type="submit" id="submitBtn">Continue to payment</button>
         <span class="err" id="err" hidden></span>
@@ -446,7 +446,7 @@ footer .legal{max-width:80ch}
       <details><summary>Do you do emissions deletes?</summary><p>No. We don't write tunes that remove or disable emissions equipment such as catalytic converters, EGR or DPF systems.</p></details>
       <details><summary>How long does it take?</summary><p>Your tune usually goes out within a few hours of getting your files, and each revision within a few hours of getting your new logs. How long the whole process takes mostly depends on how quickly you can drive and log.</p></details>
       <details><summary>What if I add mods later?</summary><p>Bigger injectors, a cam, a new turbo or a big change in boost need a re-tune. Small bolt-ons often only need a revision round. Send us the details and we'll tell you which one you need.</p></details>
-      <details><summary>Do you offer refunds?</summary><p>If we haven't started your tune, you get a full refund. Once tuning work has started, the fee isn't refundable, but we'll keep working with you until the vehicle runs right on the setup you ordered for.</p></details>
+      <details><summary>Do you offer refunds?</summary><p>No. All purchases are final and we don't offer refunds.</p></details>
       <details><summary>How do I pay?</summary><p>Checkout runs through Stripe, so you can pay with any major card, Apple Pay or Google Pay. Your card details go to Stripe and never touch this site.</p></details>
       <details><summary>Is this street legal?</summary><p>Tunes are sold for off-road and competition use only. Check your state's emissions and inspection rules before driving a modified vehicle on public roads.</p></details>
     </div>
@@ -454,7 +454,7 @@ footer .legal{max-width:80ch}
 
   <footer>
     <div class="brand">Drift <span>Labs</span></div>
-    <p class="legal">Tunes are sold for off-road and competition use only. Engine tuning carries risk. Customer is responsible for verifying AFRs, knock and engine health, and for following local emissions laws. Mazda, Miata, GM, Chevrolet, Corvette, Silverado, HP Tuners, Megasquirt and TunerStudio are trademarks of their respective owners. Drift Labs is not affiliated with any of them.</p>
+    <p class="legal">Tunes are sold for off-road and competition use only. All purchases are final. Engine tuning carries risk. Customer is responsible for verifying AFRs, knock and engine health, and for following local emissions laws. Mazda, Miata, GM, Chevrolet, Corvette, Silverado, HP Tuners, Megasquirt and TunerStudio are trademarks of their respective owners. Drift Labs is not affiliated with any of them.</p>
   </footer>
 </div>
 
@@ -520,7 +520,7 @@ var CONTACT_EMAIL = "yourname@example.com";                            // your b
       '\nTransmission: '+transText()+
       '\nCam: '+(val('cam')||'(stock / not listed)')+
       '\n\nOther mods:\n'+(val('mods')||'(none listed)')+'\n\nGoals:\n'+(val('goals')||'(none listed)')+
-      '\n\nAgreed to off-road/competition use and no-emissions-delete terms: yes';
+      '\n\nAgreed to off-road/competition use, no-emissions-delete and all-sales-final terms: yes';
     document.getElementById('summaryText').textContent=s;
     var box=document.getElementById('summary'), sent=document.getElementById('sentMsg');
     function show(){box.hidden=false;box.scrollIntoView({behavior:'smooth',block:'nearest'})}

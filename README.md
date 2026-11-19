@@ -29,6 +29,7 @@ To change the site: edit `index.html` (on GitHub, click the file, then the penci
   - **Custom Tune, $350 (most popular):** custom remote tune built to the customer's request, up to 4 revision rounds, email support through the whole process
   - The revision counts for Base (1) and Daily (2) were a first guess. Adjust them if needed.
 - **Add-ons:** extra revision round $50, re-tune after new mods $150, boost/launch control setup $75.
+- **Refunds:** none. All purchases are final (FAQ, footer and order checkbox).
 - **Payments:** a Stripe Payment Link for each package. The customer pays on Stripe's checkout page.
 - **Order emails:** Formspree (optional, free) sends each order form to the business email.
 - **Hosting:** free on GitHub Pages now, custom domain later.
