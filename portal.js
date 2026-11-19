@@ -6,7 +6,10 @@ import {
   collection, doc, addDoc, setDoc, updateDoc, query, where, orderBy, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { auth, db, $, esc, linkify, fmtDate, statusPill, friendlyAuthError, notify } from "./common.js";
-import { PACKAGES, STRIPE_LINKS } from "./settings.js";
+import { PACKAGES, STRIPE_LINKS, CONTACT_EMAIL } from "./settings.js";
+
+// Show the "email your files" option only once a real contact email is set in settings.js
+const hasEmail = CONTACT_EMAIL && !CONTACT_EMAIL.endsWith("@example.com");
 
 const views = ["loading", "authView", "verifyView", "homeView", "newView", "orderView"];
 function show(id) { views.forEach((v) => ($(v).hidden = v !== id)); window.scrollTo(0, 0); }
@@ -208,6 +211,12 @@ function openOrder(id) {
     if (!snap.exists()) { location.hash = ""; return; }
     const o = { id: snap.id, ...snap.data() };
     $("odNumber").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
+    $("emailFiles").hidden = !hasEmail;
+    $("linkLead").textContent = hasEmail ? "Or:" : "Sending files:";
+    if (hasEmail) {
+      $("filesEmail").textContent = CONTACT_EMAIL;
+      $("filesOrderNo").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
+    }
     $("odTitle").textContent = o.vehicle;
     $("odStatus").innerHTML = statusPill(o.status);
     const left = Math.max(0, (o.revisionsAllowed || 0) - (o.revisionsUsed || 0));

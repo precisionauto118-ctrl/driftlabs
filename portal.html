@@ -169,7 +169,10 @@
           <label for="msgText" class="small">Message your tuner</label>
           <textarea id="msgText" placeholder="Questions, log notes, or how the car is driving…"></textarea>
           <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="err" id="msgErr" hidden></span></div>
-          <div class="notice info small"><b>Sending files:</b> upload your tune file and datalogs to Google Drive or Dropbox, set sharing to "Anyone with the link," and paste the link in a message. Your new tunes come back the same way.</div>
+          <div class="notice info small stack" style="gap:6px">
+            <p id="emailFiles" hidden><b>Sending files:</b> email your tune file and datalogs to <b class="email" id="filesEmail"></b> with <b id="filesOrderNo"></b> in the subject line.</p>
+            <p><b id="linkLead">Sending files:</b> upload your tune file and datalogs to Google Drive or Dropbox, set sharing to "Anyone with the link," and paste the link in a message.</p>
+          </div>
         </form>
       </div>
       <div class="card stack">
