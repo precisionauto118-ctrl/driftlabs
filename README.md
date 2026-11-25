@@ -13,11 +13,11 @@ Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
 
 ## Where we left off (Nov 25, 2026)
 
-**Status: the site works end to end in test mode.** Not taking real money yet.
+**Status: LIVE. Real payments are on (Stripe verified Nov 25, 2026; payments and payouts active).**
 
 - Homepage, customer portal and admin dashboard are live on GitHub Pages.
 - Firebase (project `driftlabstuning`, free Spark plan) handles logins, orders and messages. Security rules are published.
-- Stripe account is created. The 3 payment links are **sandbox (test) links**: no real money moves.
+- The 3 live Stripe payment links are in settings.js. Automatic sales tax is OFF.
 - **Full test passed:** test order **#WZCNLJ** ("TEST ORDER - 2017 Chevrolet Silverado", Custom $350), paid with Stripe's test card, redirected back to the portal, then marked Paid in the admin dashboard.
 - The $350 test payment stays in the Stripe sandbox. Stripe can't delete payments. Sandbox data never shows in the live account, so it was left alone on purpose. **Don't** wipe sandbox data: that also deletes the 3 test payment links the site uses.
 
@@ -27,7 +27,7 @@ Engine codes: GM orders must report codes; customers can update them, admin sees
 
 **Next steps, in order:**
 
-1. **Stripe: "Verify your business"** (you have to do this yourself: SSN/EIN and bank info). Then create the 3 live payment links. Use the same prices and set each to redirect to `https://precisionauto118-ctrl.github.io/driftlabs/portal.html` after payment. Paste them into `settings.js`. The "(test mode)" label on the Pay button disappears on its own.
+1. Done Nov 25: Stripe verified and live links added. Next: custom domain (when it moves, update the 3 Stripe redirects, Firebase authorized domains, canonical/og URLs and sitemap).
 2. Delete test order #WZCNLJ from Firebase console > Firestore > `orders` (optional).
 3. Done Nov 25: privacy policy, sitemap, search data, link preview image (share.png), contact email in footer. Placeholder reviews removed; add a reviews section back once there are real ones. Next: Google Search Console (submit sitemap.xml), then launch posts.
 4. Add real customer reviews when you get them (never made up).
@@ -83,13 +83,13 @@ To change the site: edit the file on GitHub (click it, then the pencil icon), th
 
 ## Settings
 
-In `settings.js` (current values; the Stripe links are **test** links until live mode):
+In `settings.js` (current values; the Stripe links are live):
 
 ```js
 export const STRIPE_LINKS = {
-  base:   "https://buy.stripe.com/test_28EcMX7h92tjgd77Iv1wY00",   // $100 Base Tune
-  daily:  "https://buy.stripe.com/test_aFa6ozatl2tjgd7d2P1wY01",   // $200 Daily Tune
-  custom: "https://buy.stripe.com/test_cNi9ALgRJaZPd0V8Mz1wY02"    // $350 Custom Tune
+  base:   "https://buy.stripe.com/28EcMX7h92tjgd77Iv1wY00",   // $100 Base Tune
+  daily:  "https://buy.stripe.com/aFa6ozatl2tjgd7d2P1wY01",   // $200 Daily Tune
+  custom: "https://buy.stripe.com/cNi9ALgRJaZPd0V8Mz1wY02"    // $350 Custom Tune
 };
 export const FORMSPREE_ID = "";                         // optional, for email alerts
 export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
@@ -98,7 +98,7 @@ export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 ## Still to do
 
 - [x] Stripe account created and 3 **sandbox (test)** Payment Links made and added (redirect back to portal.html after paying)
-- [ ] Finish Stripe business verification ("Verify your business"), then copy the 3 links to live mode and replace the test links in `settings.js`
+- [x] Finish Stripe business verification ("Verify your business"), then copy the 3 links to live mode and replace the test links in `settings.js`
 - [x] Set `CONTACT_EMAIL` (customers email files here)
 - [x] Full end-to-end test in Stripe test mode (order #WZCNLJ, paid, marked Paid in admin)
 - [ ] (Optional) Delete test order #WZCNLJ in Firebase console > Firestore

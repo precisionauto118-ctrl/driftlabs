@@ -1,13 +1,11 @@
 /* ===== DRIFT LABS SETTINGS: change these lines ===== */
 
 // Stripe Payment Links, one per package (Stripe > Payment Links)
-// These are SANDBOX (test) links: no real money moves. Pay with test card 4242 4242 4242 4242.
-// After Stripe verifies the business, copy them to live mode and replace these
-// (live links start with https://buy.stripe.com/ but NOT /test_).
+// These are LIVE links: real money moves.
 export const STRIPE_LINKS = {
-  base:   "https://buy.stripe.com/test_28EcMX7h92tjgd77Iv1wY00",   // $100 Base Tune
-  daily:  "https://buy.stripe.com/test_aFa6ozatl2tjgd7d2P1wY01",   // $200 Daily Tune
-  custom: "https://buy.stripe.com/test_cNi9ALgRJaZPd0V8Mz1wY02"    // $350 Custom Tune
+  base:   "https://buy.stripe.com/28EcMX7h92tjgd77Iv1wY00",   // $100 Base Tune
+  daily:  "https://buy.stripe.com/aFa6ozatl2tjgd7d2P1wY01",   // $200 Daily Tune
+  custom: "https://buy.stripe.com/cNi9ALgRJaZPd0V8Mz1wY02"    // $350 Custom Tune
 };
 
 // Optional: a Formspree form ID (formspree.io). When set, you get an email
