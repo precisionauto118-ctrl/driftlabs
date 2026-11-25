@@ -25,6 +25,8 @@ Admin dashboard: https://driftlabstuning.com/admin.html
 
 Videos and photos (30-60 s, up to 200 MB) with optional gallery permission are coded too and switch on with uploads; until then customers paste YouTube unlisted or Drive links. Public gallery page not built: add it once there are photos marked OK.
 
+Messages, files, code updates and the portal email link are locked until an order is marked Paid (enforced in Firestore rules, and in storage.rules once published).
+
 Engine codes: GM orders must report codes; customers can update them, admin sees the newest report. Live now.
 
 **Next steps, in order:**

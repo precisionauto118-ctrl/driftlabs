@@ -189,7 +189,7 @@
     </div>
     <div class="notice warn" id="payNotice" hidden>
       <div class="spread">
-        <span>Your order is saved. Pay to lock in your spot, then send your files in the messages below.</span>
+        <span>Your order is saved. Pay to lock in your spot and unlock messaging with your tuner.</span>
         <a class="btn btn-primary" id="payBtn" href="#" target="_blank" rel="noopener">Pay with Stripe</a>
       </div>
     </div>
@@ -197,7 +197,8 @@
       <div class="card stack">
         <h2>Messages</h2>
         <div class="thread" id="thread" aria-live="polite"></div>
-        <form class="composer" id="msgForm" novalidate>
+        <div class="notice warn" id="lockNotice" hidden><b>Messages unlock after you pay.</b><br>Already paid? We confirm each payment by hand, usually within a few hours. Then you can message your tuner and send files here.</div>
+        <form class="composer" id="msgForm" novalidate hidden>
           <label for="msgText" class="small">Message your tuner</label>
           <textarea id="msgText" maxlength="4500" placeholder="Questions, log notes, or how the car is driving…"></textarea>
           <div class="grid2" id="uploadBox" hidden>

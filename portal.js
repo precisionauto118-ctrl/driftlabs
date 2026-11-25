@@ -248,6 +248,7 @@ function openOrder(id) {
   $("uploadBox").hidden = !UPLOADS_ENABLED;
   $("shareFiles").hidden = UPLOADS_ENABLED;
   $("msgForm").reset(); $("codesForm").reset(); $("upProgress").textContent = "";
+  $("msgForm").hidden = $("lockNotice").hidden = $("emailBox").hidden = $("codesEdit").hidden = true;
   $("codesBox").hidden = $("codesForm").hidden = $("codesList2").hidden = true;
   msg("msgErr", ""); msg("codesErr", "");
   $("codesEdit").onclick = () => ($("codesForm").hidden = !$("codesForm").hidden);
@@ -262,7 +263,10 @@ function openOrder(id) {
       $("filesEmail").textContent = CONTACT_EMAIL;
       $("filesOrderNo").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
     }
-    $("emailBox").hidden = !hasEmail;
+    $("msgForm").hidden = $("codesEdit").hidden = !o.paid;
+    $("lockNotice").hidden = !!o.paid;
+    if (!o.paid) $("codesForm").hidden = true;
+    $("emailBox").hidden = !hasEmail || !o.paid;
     if (hasEmail) {
       $("emailLink").textContent = CONTACT_EMAIL;
       $("emailLink").href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Order #${o.id.slice(0, 6).toUpperCase()} - ${o.vehicle}`)}`;
@@ -290,7 +294,7 @@ function openOrder(id) {
 
   unsubThread = onSnapshot(query(collection(ref, "messages"), orderBy("createdAt", "asc")), (snap) => {
     msgs = snap.docs.map((d) => d.data());
-    renderThread($("thread"), msgs, "customer", "Drift Labs", "No messages yet. Say hi, or send your files.");
+    renderThread($("thread"), msgs, "customer", "Drift Labs", "No messages yet.");
     codes();
   });
 
