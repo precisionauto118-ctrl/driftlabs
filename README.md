@@ -11,7 +11,7 @@ Live site: https://precisionauto118-ctrl.github.io/driftlabs/
 Customer portal: https://precisionauto118-ctrl.github.io/driftlabs/portal.html
 Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
 
-## Where we left off (Nov 19, 2026)
+## Where we left off (Nov 25, 2026)
 
 **Status: the site works end to end in test mode.** Not taking real money yet.
 
@@ -25,7 +25,7 @@ Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
 
 1. **Stripe: "Verify your business"** (you have to do this yourself: SSN/EIN and bank info). Then create the 3 live payment links. Use the same prices and set each to redirect to `https://precisionauto118-ctrl.github.io/driftlabs/portal.html` after payment. Paste them into `settings.js`. The "(test mode)" label on the Pay button disappears on its own.
 2. Delete test order #WZCNLJ from Firebase console > Firestore > `orders` (optional).
-3. Add a privacy policy page (needed since customers make accounts).
+3. Done Nov 25: privacy policy, sitemap, search data, link preview image (share.png), contact email in footer. Placeholder reviews removed; add a reviews section back once there are real ones. Next: Google Search Console (submit sitemap.xml), then launch posts.
 4. Add real customer reviews when you get them (never made up).
 5. Later: custom domain, Firebase Blaze for file uploads, automatic "Paid" from Stripe.
 
@@ -98,12 +98,12 @@ export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 - [x] Full end-to-end test in Stripe test mode (order #WZCNLJ, paid, marked Paid in admin)
 - [ ] (Optional) Delete test order #WZCNLJ in Firebase console > Firestore
 - [ ] Later, when busy: upgrade Firebase to Blaze for built-in file uploads (optional)
-- [ ] Add a privacy policy page (needed now that customers create accounts)
+- [x] Add a privacy policy page (needed now that customers create accounts)
 - [ ] Later: automatic "Paid" status from Stripe (needs Blaze and a small server function)
 - [ ] (Optional) Create a Formspree form and paste its ID into `FORMSPREE_ID`
-- [ ] Fill in the yellow highlighted placeholders (search the file for `class="fill"`):
+- [x] (Removed) Fill in the yellow highlighted placeholders (search the file for `class="fill"`):
   - [ ] 3 real customer reviews, used with permission (never made up)
-- [ ] Once nothing is left to fill in, delete the `.fill` style rule so no yellow highlights remain
+- [x] Once nothing is left to fill in, delete the `.fill` style rule so no yellow highlights remain
 - [ ] Grab social handles (Facebook, Instagram) for Drift Labs
 - [ ] Check a domain (e.g. driftlabstuning.com) and run the USPTO trademark search: https://tmsearch.uspto.gov
 - [ ] Maybe: a simple Drift Labs text logo
