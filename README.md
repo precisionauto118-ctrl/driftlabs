@@ -7,9 +7,9 @@ Website for **Drift Labs**, a remote ECU tuning business that serves the whole U
 
 Customers create an account (any email, or Google), order and pay in their own portal, message the tuner, and track revisions. The tuner manages everything from an admin dashboard.
 
-Live site: https://precisionauto118-ctrl.github.io/driftlabs/
-Customer portal: https://precisionauto118-ctrl.github.io/driftlabs/portal.html
-Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
+Live site: https://driftlabstuning.com/
+Customer portal: https://driftlabstuning.com/portal.html
+Admin dashboard: https://driftlabstuning.com/admin.html
 
 ## Where we left off (Nov 25, 2026)
 
@@ -27,7 +27,7 @@ Engine codes: GM orders must report codes; customers can update them, admin sees
 
 **Next steps, in order:**
 
-1. Done Nov 25: Stripe verified and live links added. Next: custom domain (when it moves, update the 3 Stripe redirects, Firebase authorized domains, canonical/og URLs and sitemap).
+1. Done Nov 25: Stripe verified, live links added, custom domain driftlabstuning.com (Cloudflare, account precisionauto.118; DNS only records to GitHub Pages; CNAME file in repo).
 2. Delete test order #WZCNLJ from Firebase console > Firestore > `orders` (optional).
 3. Done Nov 25: privacy policy, sitemap, search data, link preview image (share.png), contact email in footer. Placeholder reviews removed; add a reviews section back once there are real ones. Next: Google Search Console (submit sitemap.xml), then launch posts.
 4. Add real customer reviews when you get them (never made up).
@@ -53,7 +53,7 @@ To change the site: edit the file on GitHub (click it, then the pencil icon), th
 
 ## Backend: Firebase project `driftlabstuning`
 
-- **Sign-in:** Email/Password (any email, with email verification) and Google. Authorized domain: `precisionauto118-ctrl.github.io`. Add the custom domain there later.
+- **Sign-in:** Email/Password (any email, with email verification) and Google. Authorized domains: `driftlabstuning.com` and `precisionauto118-ctrl.github.io`.
 - **Database:** Cloud Firestore, `nam5 (United States)`, production mode.
   - `users/{uid}`: name, email
   - `orders/{orderId}`: customer, package, price, vehicle details, `status`, `paid`, `revisionsAllowed`, `revisionsUsed`, unread flags
