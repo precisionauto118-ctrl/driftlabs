@@ -91,7 +91,7 @@ export const STRIPE_LINKS = {
   daily:  "https://buy.stripe.com/aFa6ozatl2tjgd7d2P1wY01",   // $200 Daily Tune
   custom: "https://buy.stripe.com/cNi9ALgRJaZPd0V8Mz1wY02"    // $350 Custom Tune
 };
-export const FORMSPREE_ID = "";                         // optional, for email alerts
+export const FORMSPREE_ID = "xgakdpwo";                         // optional, for email alerts
 export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 ```
 
@@ -105,7 +105,7 @@ export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 - [ ] Later, when busy: upgrade Firebase to Blaze for built-in file uploads (optional)
 - [x] Add a privacy policy page (needed now that customers create accounts)
 - [ ] Later: automatic "Paid" status from Stripe (needs Blaze and a small server function)
-- [ ] (Optional) Create a Formspree form and paste its ID into `FORMSPREE_ID`
+- [x] (Done Nov 25, sends to precisionauto.118) Create a Formspree form and paste its ID into `FORMSPREE_ID`
 - [x] (Removed) Fill in the yellow highlighted placeholders (search the file for `class="fill"`):
   - [ ] 3 real customer reviews, used with permission (never made up)
 - [x] Once nothing is left to fill in, delete the `.fill` style rule so no yellow highlights remain

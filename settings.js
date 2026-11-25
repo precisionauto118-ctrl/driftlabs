@@ -10,7 +10,7 @@ export const STRIPE_LINKS = {
 
 // Optional: a Formspree form ID (formspree.io). When set, you get an email
 // for every new order and every new customer message.
-export const FORMSPREE_ID = "";
+export const FORMSPREE_ID = "xgakdpwo";
 
 // Public contact email shown to customers
 export const CONTACT_EMAIL = "leviarnold.118@gmail.com";

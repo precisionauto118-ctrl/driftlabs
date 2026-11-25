@@ -204,7 +204,7 @@ $("orderForm").addEventListener("submit", async (e) => {
   const btn = $("orderSubmit"); btn.disabled = true;
   try {
     const ref = await addDoc(collection(db, "orders"), data);
-    notify(`New ${p.name} order: ${data.vehicle}`, { customer: data.customerName, email: data.customerEmail, package: `${p.name} ($${p.price})`, vehicle: data.vehicle, platform: data.platform });
+    notify(`New ${p.name} order: ${data.vehicle}`, { customer: data.customerName, email: data.customerEmail, package: `${p.name} ($${p.price})`, vehicle: data.vehicle, platform: data.platform, open: `https://driftlabstuning.com/admin.html#order-${ref.id}` });
     $("orderForm").reset(); syncTrans(); syncCodes();
     location.hash = "order-" + ref.id;
   } catch (err) {
@@ -276,7 +276,7 @@ function openOrder(id) {
   async function post(fields) {
     await addDoc(collection(ref, "messages"), { from: "customer", uid: user.uid, createdAt: serverTimestamp(), ...fields });
     await updateDoc(ref, { unreadByAdmin: true, lastMessageAt: serverTimestamp(), updatedAt: serverTimestamp() });
-    notify(`New message on ${$("odTitle").textContent}`, { customer: user.displayName || "", email: user.email, message: fields.text });
+    notify(`New message on ${$("odTitle").textContent}`, { customer: user.displayName || "", email: user.email, message: fields.text, open: `https://driftlabstuning.com/admin.html#order-${id}` });
   }
 
   $("msgForm").onsubmit = async (e) => {
