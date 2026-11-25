@@ -70,10 +70,10 @@ To change the site: edit the file on GitHub (click it, then the pencil icon), th
 - **Market:** US-wide, all 50 states.
 - **Turnaround:** tunes and revisions usually go out within a few hours ("Same-day tunes").
 - **Pricing** (same for Megasquirt and HP Tuners):
-  - **Base Tune, $100:** base tune to get started and running right, 1 revision round, email support
-  - **Daily Tune, $200:** smooth, reliable daily driving (idle, cold start, part throttle), 2 revision rounds, email support
+  - **Base Tune, $100:** base tune to get started and running right, email support
+  - **Daily Tune, $200:** smooth, reliable daily driving (idle, cold start, part throttle), email support
   - **Custom Tune, $350 (most popular):** custom remote tune built to the customer's request, up to 4 revision rounds, email support through the whole process
-  - The revision counts for Base (1) and Daily (2) were a first guess. Adjust them if needed.
+  - Base and Daily show no revision number to customers (owner request, Nov 25). Orders still store 1 and 2 internally because the database rules require it.
 - **Add-ons:** extra revision round $50, re-tune after new mods $150, boost/launch control setup $75.
 - **Refunds:** none. All purchases are final (FAQ, footer and order checkbox).
 - **Payments:** a Stripe Payment Link for each package. The customer pays on Stripe's checkout page.

@@ -249,7 +249,7 @@ function openOrder(id) {
     $("odTitle").textContent = o.vehicle;
     $("odStatus").innerHTML = statusPill(o.status);
     const left = Math.max(0, (o.revisionsAllowed || 0) - (o.revisionsUsed || 0));
-    $("odRevs").textContent = `${o.pkgName} · $${o.price} · ${left} of ${o.revisionsAllowed} revisions left`;
+    $("odRevs").textContent = `${o.pkgName} · $${o.price}` + (o.pkg === "custom" ? ` · ${left} of ${o.revisionsAllowed} revisions left` : "");
     $("payNotice").hidden = !!o.paid;
     if (!o.paid) {
       const testMode = STRIPE_LINKS[o.pkg].includes("/test_");
