@@ -116,7 +116,7 @@ function openOrder(id) {
       fact("Package", `${o.pkgName} ($${o.price})`), fact("Platform", o.platform),
       fact("Engine", o.engine), fact("Induction", o.induction), fact("MAF sensor", o.maf), fact("Fuel", o.fuel),
       fact("Base timing", o.baseTiming), fact("Transmission", trans), fact("Cam", o.cam), fact("Other mods", o.mods), fact("Goals", o.goals),
-      fact("Ordered", fmtDate(o.createdAt)), fact("Stripe reference", o.id)
+      fact("Mechanical statement", o.agreedMechanical ? "Agreed at order" : ""), fact("Ordered", fmtDate(o.createdAt)), fact("Stripe reference", o.id)
     ].join("");
     if (o.unreadByAdmin) updateDoc(ref, { unreadByAdmin: false }).catch(() => {});
   });

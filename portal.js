@@ -192,7 +192,7 @@ $("orderForm").addEventListener("submit", async (e) => {
     if (!val("timingDeg")) missing.push("your base timing in degrees");
     else if (!$("timingDeg").checkValidity()) missing.push("a base timing between -20 and 60 degrees");
   }
-  if (!$("agree").checked) missing.push("the checkbox at the bottom");
+  if (!$("agreeMech").checked || !$("agree").checked) missing.push("both checkboxes at the bottom");
   if (missing.length) { msg("orderErr", "Please add " + missing.join(", ") + "."); return; }
   msg("orderErr", "");
 
@@ -211,7 +211,7 @@ $("orderForm").addEventListener("submit", async (e) => {
     codesStatus: gm ? val("codesStatus") : "",
     codes: gm && val("codesStatus") === "has" ? val("codes") : "",
     baseTiming: !ms ? "" : !knowsTiming() ? "Customer doesn't know" : `${val("timingDeg")}° BTDC (${val("timingStatus") === "light" ? "checked with timing light" : "not checked with a light"})`,
-    agreedToTerms: true, paid: false, status: "awaiting_payment",
+    agreedToTerms: true, agreedMechanical: true, paid: false, status: "awaiting_payment",
     unreadByAdmin: true, unreadByCustomer: false,
     createdAt: serverTimestamp(), updatedAt: serverTimestamp(), lastMessageAt: serverTimestamp()
   };
