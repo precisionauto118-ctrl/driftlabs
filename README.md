@@ -73,7 +73,7 @@ To change the site: edit the file on GitHub (click it, then the pencil icon), th
   - **Base Tune, $100:** base tune to get started and running right, email support
   - **Daily Tune, $200:** smooth, reliable daily driving (idle, cold start, part throttle), email support
   - **Custom Tune, $350 (most popular):** custom remote tune built to the customer's request, up to 4 revision rounds, email support through the whole process
-  - Base and Daily show no revision number to customers (owner request, Nov 25). Orders still store 1 and 2 internally because the database rules require it.
+  - Base and Daily show no revision number to customers, and include fixes as needed if something isn't right (owner request, Nov 25). Orders still store 1 and 2 internally because the database rules require it.
 - **Add-ons:** extra revision round $50, re-tune after new mods $150, boost/launch control setup $75.
 - **Refunds:** none. All purchases are final (FAQ, footer and order checkbox).
 - **Payments:** a Stripe Payment Link for each package. The customer pays on Stripe's checkout page.
