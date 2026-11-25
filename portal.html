@@ -203,12 +203,15 @@
           <div class="grid2" id="uploadBox" hidden>
             <div class="field"><label for="fileInput">Attach a file (optional)</label><input type="file" id="fileInput"></div>
             <div class="field"><label for="fileKind">What is it?</label>
-              <select id="fileKind"><option>Datalog</option><option>Stock / current tune file</option><option>Log after new tune</option><option>Photo or screenshot</option><option>Other file</option></select></div>
-            <p class="small muted field full">Add a comment above: how it's driving, what changed, any problems. Files up to 50 MB.</p>
+              <select id="fileKind"><option>Datalog</option><option>Stock / current tune file</option><option>Log after new tune</option><option>Video of it running / sound</option><option>Photo of the vehicle</option><option>Screenshot</option><option>Other file</option></select></div>
+            <p class="small muted field full">Add a comment above: how it's driving, what changed, any problems. Files up to 50 MB, videos up to 200 MB.</p>
+            <p class="small muted field full" id="mediaTip" hidden>Best video: 30 to 60 seconds with the hood up. Cold start if you can, then idle, then a slow rev. Film while parked, never while driving.</p>
+            <label class="check field full" for="galleryOk" id="galleryField" hidden><input type="checkbox" id="galleryOk"> Optional: Drift Labs may show this photo or video on its website and social media. Please cover your plate.</label>
           </div>
           <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="small muted" id="upProgress" role="status"></span><span class="err" id="msgErr" hidden></span></div>
           <div class="notice info small stack" style="gap:6px" id="shareFiles">
             <p id="emailFiles" hidden><b>Sending files:</b> email your tune file and datalogs to <b class="email" id="filesEmail"></b> with <b id="filesOrderNo"></b> in the subject line.</p>
+            <p><b>Videos and photos help us diagnose.</b> Film 30 to 60 seconds with the hood up: cold start, idle, then a slow rev (parked, never while driving). Upload it to YouTube as "Unlisted" or to Google Drive, and paste the link in a message.</p>
             <p><b id="linkLead">Sending files:</b> upload your tune file and datalogs to Google Drive or Dropbox, set sharing to "Anyone with the link," and paste the link in a message.</p>
           </div>
         </form>

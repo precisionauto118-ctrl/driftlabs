@@ -23,6 +23,8 @@ Admin dashboard: https://driftlabstuning.com/admin.html
 
 **Built-in file uploads: coded, switched off until Firebase is on Blaze.** Uploads with comments (files.js), both directions. To turn on: 1) upgrade to Blaze with a budget alert, 2) create Storage (bucket driftlabstuning.firebasestorage.app), 3) publish storage.rules (not in this repo; names the admin email) and accept the Firestore access prompt, 4) set UPLOADS_ENABLED = true in settings.js, 5) test a real upload and download from both sides, plus a second customer account being refused.
 
+Videos and photos (30-60 s, up to 200 MB) with optional gallery permission are coded too and switch on with uploads; until then customers paste YouTube unlisted or Drive links. Public gallery page not built: add it once there are photos marked OK.
+
 Engine codes: GM orders must report codes; customers can update them, admin sees the newest report. Live now.
 
 **Next steps, in order:**

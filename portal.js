@@ -6,7 +6,7 @@ import {
   collection, doc, addDoc, setDoc, updateDoc, query, where, orderBy, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import { auth, db, $, esc, fmtDate, statusPill, friendlyAuthError, notify } from "./common.js";
-import { ACCEPT, checkFile, uploadFile, renderThread, drawCodes, isGM } from "./files.js";
+import { ACCEPT, checkFile, uploadFile, renderThread, drawCodes, isGM, isMedia } from "./files.js";
 import { PACKAGES, STRIPE_LINKS, CONTACT_EMAIL, UPLOADS_ENABLED } from "./settings.js";
 
 // Show the "email your files" option only once a real contact email is set in settings.js
@@ -159,6 +159,13 @@ $("platform").onchange = syncCodes;
 $("codesStatus").onchange = syncCodes;
 $("codesStatus2").onchange = () => ($("codesList2").hidden = val("codesStatus2") !== "has");
 $("fileInput").accept = ACCEPT;
+function syncMedia() {
+  const on = isMedia(val("fileKind"));
+  $("mediaTip").hidden = $("galleryField").hidden = !on;
+  if (!on) $("galleryOk").checked = false;
+}
+$("fileKind").onchange = syncMedia;
+$("msgForm").addEventListener("reset", () => setTimeout(syncMedia));
 $("trans").onchange = syncTrans;
 $("converter").onchange = syncTrans;
 
@@ -299,10 +306,10 @@ function openOrder(id) {
     if (!text && !file) { msg("msgErr", UPLOADS_ENABLED ? "Type a message or choose a file." : "Type a message."); return; }
     const bad = file ? checkFile(file) : "";
     if (bad) { msg("msgErr", bad); return; }
-    const kind = val("fileKind");
+    const kind = val("fileKind"), galleryOk = !!file && isMedia(kind) && $("galleryOk").checked;
     const btn = $("msgSend"); btn.disabled = true; msg("msgErr", "");
     try {
-      const up = file ? { ...(await uploadFile(id, "customer", file, (p) => ($("upProgress").textContent = `Uploading ${p}%`))), fileKind: kind } : {};
+      const up = file ? { ...(await uploadFile(id, "customer", file, (p) => ($("upProgress").textContent = `Uploading ${p}%`))), fileKind: kind, ...(galleryOk ? { galleryOk } : {}) } : {};
       await post({ text: text || "Uploaded a file.", ...up });
       $("msgForm").reset();
     } catch (err) {

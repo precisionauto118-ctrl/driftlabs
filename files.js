@@ -2,16 +2,18 @@
 import { app, esc, linkify, fmtDate } from "./common.js";
 
 const SDK = "https://www.gstatic.com/firebasejs/11.0.2/firebase-storage.js";
-const MAX_MB = 50;
+const MAX_MB = 50, MAX_VIDEO_MB = 200;
 // Keep this list in step with storage.rules
-const EXTENSIONS = ["hpt", "hpl", "msq", "msl", "mlg", "csv", "log", "txt", "zip", "jpg", "jpeg", "png"];
-export const ACCEPT = EXTENSIONS.map((x) => "." + x).join(",");
+const EXTENSIONS = ["hpt", "hpl", "msq", "msl", "mlg", "csv", "log", "txt", "zip", "jpg", "jpeg", "png", "heic"];
+const VIDEO = ["mp4", "mov", "m4v", "webm"];
+export const ACCEPT = [...EXTENSIONS, ...VIDEO].map((x) => "." + x).join(",");
 
 export function checkFile(f) {
   const ext = f.name.includes(".") ? f.name.split(".").pop().toLowerCase() : "";
-  if (!EXTENSIONS.includes(ext)) return `That file type isn't supported. Use ${EXTENSIONS.map((x) => "." + x).join(", ")}.`;
+  if (![...EXTENSIONS, ...VIDEO].includes(ext)) return `That file type isn't supported. Use ${ACCEPT.replace(/,/g, ", ")}.`;
   if (f.size === 0) return "That file is empty.";
-  if (f.size >= MAX_MB * 1024 * 1024) return `Files must be under ${MAX_MB} MB. Zip it, or email it.`;
+  const max = VIDEO.includes(ext) ? MAX_VIDEO_MB : MAX_MB;
+  if (f.size >= max * 1024 * 1024) return VIDEO.includes(ext) ? `Videos must be under ${max} MB. Trim it to 30-60 seconds, or paste a link.` : `Files must be under ${max} MB. Zip it, or email it.`;
   return "";
 }
 
@@ -40,7 +42,8 @@ export function renderThread(el, msgs, me, otherName, emptyText) {
   el.innerHTML = msgs.length ? msgs.map((m) => {
     const codes = m.codesStatus ? `<span class="codes-line"><b>Engine codes:</b> ${esc(codesText(m))}</span>` : "";
     const file = m.filePath ? `<button type="button" class="file" data-path="${esc(m.filePath)}"><b>${esc(m.fileName)}</b><span>${esc(m.fileKind || "File")} · ${size(Number(m.fileSize) || 0)} · Download</span></button>` : "";
-    return `<div class="msg ${m.from === me ? "mine" : "theirs"}">${file}${codes}<span>${linkify(m.text)}</span><span class="when">${m.from === me ? "You" : esc(otherName)} · ${fmtDate(m.createdAt)}</span></div>`;
+    const gallery = m.galleryOk ? `<span class="small">✓ OK to show in gallery</span>` : "";
+    return `<div class="msg ${m.from === me ? "mine" : "theirs"}">${file}${gallery}${codes}<span>${linkify(m.text)}</span><span class="when">${m.from === me ? "You" : esc(otherName)} · ${fmtDate(m.createdAt)}</span></div>`;
   }).join("") : `<p class="muted small">${esc(emptyText)}</p>`;
   el.querySelectorAll("[data-path]").forEach((b) => (b.onclick = async () => {
     const s = b.querySelector("span"), was = s.dataset.was || (s.dataset.was = s.textContent);
@@ -67,4 +70,5 @@ export function drawCodes(order, msgs, box, text) {
   text.textContent = codesText(c);
   box.className = "notice " + (c.codesStatus === "none" ? "good" : "warn");
 }
+export const isMedia = (kind) => /video|photo/i.test(kind);
 export const isGM = (platform) => platform === "HP Tuners (GM)";
