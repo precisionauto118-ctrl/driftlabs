@@ -75,6 +75,7 @@
             <div class="field"><label for="fileKind">What is it?</label>
               <select id="fileKind"><option>New tune</option><option>Revised tune</option><option>Logging config</option><option>Other file</option></select></div>
           </div>
+          <div class="notice info small" id="tellBox" hidden><b id="tellText"></b> They don't get an alert on their own. <a id="tellLink" href="#">Email the customer</a></div>
           <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="small muted" id="upProgress" role="status"></span><span class="err" id="msgErr" hidden></span></div>
         </form>
       </div>
@@ -85,6 +86,8 @@
             <label for="statusSel">Status</label>
             <select id="statusSel"></select>
           </div>
+          <div class="notice warn small" id="approveBox" hidden><b>Check this one before they pay.</b><br><span id="approveWhy"></span>
+            <label class="check" for="approveChk" style="margin-top:8px"><input type="checkbox" id="approveChk"> OK to pay (I can tune this)</label></div>
           <label class="check" for="paidChk"><input type="checkbox" id="paidChk"> Paid (check after the Stripe payment email arrives)</label>
           <div class="field">
             <label>Revisions used</label>

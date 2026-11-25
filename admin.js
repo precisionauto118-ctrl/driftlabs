@@ -107,6 +107,9 @@ function openOrder(id) {
     $("odStatusPill").innerHTML = statusPill(o.status);
     $("statusSel").value = o.status;
     $("paidChk").checked = !!o.paid;
+    $("approveBox").hidden = !o.needsApproval || !!o.paid;
+    $("approveChk").checked = !!o.approved;
+    $("approveWhy").textContent = o.platform === "Not sure" ? "They don't know which platform they have." : "Megasquirt without a wideband wired to the ECU.";
     $("revCount").textContent = `${o.revisionsUsed || 0} of ${o.revisionsAllowed}`;
     const trans = o.transmission === "Automatic"
       ? `Automatic ${o.transModel}\n${o.converter}${o.converterDetail ? ": " + o.converterDetail : ""}`
@@ -114,7 +117,7 @@ function openOrder(id) {
     $("odFacts").innerHTML = [
       fact("Customer", o.customerName), fact("Email", o.customerEmail),
       fact("Package", `${o.pkgName} ($${o.price})`), fact("Platform", o.platform),
-      fact("Engine", o.engine), fact("Induction", o.induction), fact("MAF sensor", o.maf), fact("Fuel", o.fuel),
+      fact("Engine", o.engine), fact("Induction", o.induction), fact("MAF sensor", o.maf), fact("Wideband", o.wideband), fact("Fuel", o.fuel),
       fact("Base timing", o.baseTiming), fact("Transmission", trans), fact("Cam", o.cam), fact("Other mods", o.mods), fact("Goals", o.goals),
       fact("Mechanical statement", o.agreedMechanical ? "Agreed at order" : ""), fact("Ordered", fmtDate(o.createdAt)), fact("Stripe reference", o.id)
     ].join("");
@@ -128,12 +131,25 @@ function openOrder(id) {
   });
 
   $("statusSel").onchange = () => save(ref, { status: $("statusSel").value });
+  function tell(text, line) {
+    const o = current, no = "#" + o.id.slice(0, 6).toUpperCase();
+    $("tellText").textContent = text;
+    $("tellLink").href = `mailto:${encodeURIComponent(o.customerEmail)}?subject=${encodeURIComponent(`Drift Labs order ${no}: update on your tune`)}&body=${encodeURIComponent(`Hi ${(o.customerName || "").split(" ")[0] || "there"},\n\n${line}\n\nhttps://driftlabstuning.com/portal.html#order-${o.id}\n\nDrift Labs`)}`;
+    $("tellBox").hidden = false;
+  }
+  $("tellBox").hidden = true;
+  $("approveChk").onchange = async () => {
+    const approved = $("approveChk").checked;
+    await save(ref, { approved });
+    if (approved) tell("Approved.", `Good news, we can tune your ${current.vehicle}. You can pay for your order here:`);
+  };
   $("paidChk").onchange = () => {
     const paid = $("paidChk").checked;
     const patch = { paid };
     if (paid && current.status === "awaiting_payment") patch.status = "waiting_files";
     if (!paid) patch.status = "awaiting_payment";
     save(ref, patch);
+    if (paid) tell("Marked paid.", "We got your payment, thank you! Your messages are unlocked. Send us your tune file and datalog here:");
   };
   $("revPlus").onclick = () => save(ref, { revisionsUsed: Math.min((current.revisionsUsed || 0) + 1, 99) });
   $("revMinus").onclick = () => save(ref, { revisionsUsed: Math.max((current.revisionsUsed || 0) - 1, 0) });
@@ -151,6 +167,7 @@ function openOrder(id) {
       await addDoc(collection(ref, "messages"), { from: "admin", uid: auth.currentUser.uid, text: text || "Sent a file.", createdAt: serverTimestamp(), ...up });
       await updateDoc(ref, { unreadByCustomer: true, lastMessageAt: serverTimestamp(), updatedAt: serverTimestamp() });
       $("msgForm").reset();
+      tell("Reply sent.", "We just replied on your order. You can read it here:");
     } catch (err) { console.error(err); msg("msgErr", "That didn't send. Try again."); }
     finally { btn.disabled = false; $("upProgress").textContent = ""; }
   };

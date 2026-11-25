@@ -117,6 +117,11 @@
           <select id="maf"><option value="">Choose one</option><option>Yes, MAF installed</option><option>No MAF (speed density / MAP only)</option><option>Not sure</option></select>
         </div>
         <div class="field">
+          <label for="wideband">Do you have a wideband O2 sensor?</label>
+          <select id="wideband"><option value="">Choose one</option><option>Yes, wired to the ECU or logger</option><option>Yes, gauge only</option><option>No wideband</option></select>
+        </div>
+        <p class="small muted field full" id="widebandNote" hidden>Megasquirt tunes need a wideband wired to the ECU. You can still send your order, and we'll check with you before you pay.</p>
+        <div class="field">
           <label for="fuel">Fuel</label>
           <select id="fuel"><option value="">Choose one</option><option>87 octane</option><option>91 octane</option><option>93 octane</option><option>110 octane race fuel</option><option>E85 / flex</option><option>Other</option></select>
         </div>
@@ -186,6 +191,13 @@
         <h1 id="odTitle"></h1>
       </div>
       <div id="odStatus"></div>
+    </div>
+    <div class="notice info" id="reviewNotice" hidden><b>We're checking your setup first.</b><br>Please don't pay yet. We'll make sure we can tune your vehicle and email you, usually within a few hours. Then the Pay button shows up here.</div>
+    <div class="notice info" id="paidNotice" hidden>
+      <div class="spread">
+        <span><b>Already paid? Don't pay again.</b> We confirm each payment by hand, usually within a few hours, and then your messages unlock.</span>
+        <button class="btn btn-ghost" id="payAgainBtn" type="button">I didn't finish paying</button>
+      </div>
     </div>
     <div class="notice warn" id="payNotice" hidden>
       <div class="spread">

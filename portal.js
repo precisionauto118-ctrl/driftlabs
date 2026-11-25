@@ -150,11 +150,18 @@ function syncCodes() {
   $("codesField").hidden = $("codesNote").hidden = !gm;
   $("codesListField").hidden = !(gm && val("codesStatus") === "has");
   const ms = val("platform") === "Megasquirt";
+  $("widebandNote").hidden = !(ms && val("wideband") && !val("wideband").startsWith("Yes, wired"));
+  $("orderSubmit").textContent = needsReview() ? "Send order for review" : "Place order & continue to payment";
   $("timingField").hidden = $("timingNote").hidden = !ms;
   $("timingDegField").hidden = !(ms && knowsTiming());
 }
 function knowsTiming() { return ["light", "unchecked"].includes(val("timingStatus")); }
 $("timingStatus").onchange = syncCodes;
+$("wideband").onchange = syncCodes;
+// Orders we check by hand before the customer can pay
+function needsReview() {
+  return val("platform") === "Not sure" || (val("platform") === "Megasquirt" && !!val("wideband") && !val("wideband").startsWith("Yes, wired"));
+}
 $("platform").onchange = syncCodes;
 $("codesStatus").onchange = syncCodes;
 $("codesStatus2").onchange = () => ($("codesList2").hidden = val("codesStatus2") !== "has");
@@ -183,6 +190,8 @@ $("orderForm").addEventListener("submit", async (e) => {
   if (!val("platform")) missing.push("a platform");
   if (!val("pkg")) missing.push("a package");
   if (!val("vehicle")) missing.push("your vehicle");
+  if (!val("engine")) missing.push("your engine");
+  if (!val("wideband")) missing.push("whether you have a wideband");
   if (!val("fuel")) missing.push("your fuel");
   if (!val("maf")) missing.push("whether it has a MAF sensor");
   if (!val("trans")) missing.push("your transmission");
@@ -209,7 +218,7 @@ $("orderForm").addEventListener("submit", async (e) => {
     uid: user.uid, customerName: user.displayName || "", customerEmail: user.email,
     platform: val("platform"), pkg, pkgName: p.name, price: p.price,
     revisionsAllowed: p.revisions, revisionsUsed: 0,
-    vehicle: val("vehicle"), engine: val("engine"), induction: val("induction"), maf: val("maf"), fuel: val("fuel"),
+    vehicle: val("vehicle"), engine: val("engine"), induction: val("induction"), maf: val("maf"), wideband: val("wideband"), needsApproval: needsReview(), approved: false, fuel: val("fuel"),
     transmission: val("trans"),
     transModel: auto ? val("transModel") : "",
     converter: auto ? val("converter") : "",
@@ -225,7 +234,7 @@ $("orderForm").addEventListener("submit", async (e) => {
   const btn = $("orderSubmit"); btn.disabled = true;
   try {
     const ref = await addDoc(collection(db, "orders"), data);
-    notify(`New ${p.name} order: ${data.vehicle}`, { customer: data.customerName, email: data.customerEmail, package: `${p.name} ($${p.price})`, vehicle: data.vehicle, platform: data.platform, open: `https://driftlabstuning.com/admin.html#order-${ref.id}` });
+    notify(`${data.needsApproval ? "CHECK FIRST: new" : "New"} ${p.name} order: ${data.vehicle}`, { customer: data.customerName, email: data.customerEmail, package: `${p.name} ($${p.price})`, vehicle: data.vehicle, platform: data.platform, open: `https://driftlabstuning.com/admin.html#order-${ref.id}` });
     $("orderForm").reset(); syncTrans(); syncCodes();
     location.hash = "order-" + ref.id;
   } catch (err) {
@@ -235,6 +244,18 @@ $("orderForm").addEventListener("submit", async (e) => {
 });
 
 /* ---------- Order detail ---------- */
+// Remembers on this device that checkout was opened, so nobody pays twice while we confirm
+let payStarted = {};
+function startedPaying(id, set) {
+  const k = "dl-pay-" + id;
+  if (set !== undefined) payStarted[id] = set;
+  try {
+    if (set === true) localStorage.setItem(k, "1");
+    if (set === false) localStorage.removeItem(k);
+    if (payStarted[id] === undefined) return localStorage.getItem(k) === "1";
+  } catch (_) { /* storage blocked */ }
+  return !!payStarted[id];
+}
 function fact(label, value) {
   return value ? `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>` : "";
 }
@@ -248,6 +269,7 @@ function openOrder(id) {
   $("uploadBox").hidden = !UPLOADS_ENABLED;
   $("shareFiles").hidden = UPLOADS_ENABLED;
   $("msgForm").reset(); $("codesForm").reset(); $("upProgress").textContent = "";
+  $("payNotice").hidden = $("paidNotice").hidden = $("reviewNotice").hidden = true;
   $("msgForm").hidden = $("lockNotice").hidden = $("emailBox").hidden = $("codesEdit").hidden = true;
   $("codesBox").hidden = $("codesForm").hidden = $("codesList2").hidden = true;
   msg("msgErr", ""); msg("codesErr", "");
@@ -264,7 +286,8 @@ function openOrder(id) {
       $("filesOrderNo").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
     }
     $("msgForm").hidden = $("codesEdit").hidden = !o.paid;
-    $("lockNotice").hidden = !!o.paid;
+    const review = !!o.needsApproval && !o.approved && !o.paid;
+    $("lockNotice").hidden = !!o.paid || review;
     if (!o.paid) $("codesForm").hidden = true;
     $("emailBox").hidden = !hasEmail || !o.paid;
     if (hasEmail) {
@@ -275,7 +298,16 @@ function openOrder(id) {
     $("odStatus").innerHTML = statusPill(o.status);
     const left = Math.max(0, (o.revisionsAllowed || 0) - (o.revisionsUsed || 0));
     $("odRevs").textContent = `${o.pkgName} · $${o.price}` + (o.pkg === "custom" ? ` · ${left} of ${o.revisionsAllowed} revisions left` : " · fixes as needed");
-    $("payNotice").hidden = !!o.paid;
+    const drawPay = () => {
+      const started = startedPaying(o.id);
+      $("reviewNotice").hidden = !review;
+      $("payNotice").hidden = !!o.paid || review || started;
+      $("paidNotice").hidden = !!o.paid || review || !started;
+      if (started) $("lockNotice").hidden = true;
+    };
+    drawPay();
+    $("payBtn").onclick = () => { startedPaying(o.id, true); setTimeout(drawPay, 1500); };
+    $("payAgainBtn").onclick = () => { startedPaying(o.id, false); drawPay(); };
     if (!o.paid) {
       const testMode = STRIPE_LINKS[o.pkg].includes("/test_");
       $("payBtn").textContent = testMode ? `Pay $${o.price} (test mode)` : `Pay $${o.price} with Stripe`;
@@ -285,7 +317,7 @@ function openOrder(id) {
       ? `Automatic ${o.transModel}\n${o.converter}${o.converterDetail ? ": " + o.converterDetail : ""}`
       : o.transmission;
     $("odFacts").innerHTML = [
-      fact("Platform", o.platform), fact("Engine", o.engine), fact("Induction", o.induction), fact("MAF sensor", o.maf), fact("Fuel", o.fuel),
+      fact("Platform", o.platform), fact("Engine", o.engine), fact("Induction", o.induction), fact("MAF sensor", o.maf), fact("Wideband", o.wideband), fact("Fuel", o.fuel),
       fact("Base timing", o.baseTiming), fact("Transmission", trans), fact("Cam", o.cam), fact("Other mods", o.mods), fact("Goals", o.goals),
       fact("Ordered", fmtDate(o.createdAt))
     ].join("");
