@@ -2,8 +2,9 @@ import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from
 import {
   collection, doc, addDoc, updateDoc, query, orderBy, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { auth, db, $, esc, linkify, fmtDate, statusPill, friendlyAuthError } from "./common.js";
-import { STATUSES } from "./settings.js";
+import { auth, db, $, esc, fmtDate, statusPill, friendlyAuthError } from "./common.js";
+import { ACCEPT, checkFile, uploadFile, renderThread, drawCodes } from "./files.js";
+import { STATUSES, UPLOADS_ENABLED } from "./settings.js";
 
 const views = ["loading", "authView", "deniedView", "listView", "orderView"];
 function show(id) { views.forEach((v) => ($(v).hidden = v !== id)); window.scrollTo(0, 0); }
@@ -89,10 +90,18 @@ function openOrder(id) {
   $("thread").innerHTML = '<p class="muted small">Loading messages…</p>';
   msg("saveOk", ""); msg("saveErr", "");
   const ref = doc(db, "orders", id);
+  let order = null, msgs = [];
+  const codes = () => drawCodes(order, msgs, $("codesBox"), $("codesNow"));
+  $("msgForm").reset(); $("upProgress").textContent = ""; msg("msgErr", "");
+  $("codesBox").hidden = true;
+  $("uploadBox").hidden = !UPLOADS_ENABLED;
+  $("fileInput").accept = ACCEPT;
 
   unsubOrder = onSnapshot(ref, (snap) => {
     if (!snap.exists()) { location.hash = ""; return; }
     const o = current = { id: snap.id, ...snap.data() };
+    order = o; codes();
+    $("emailLink").href = `mailto:${encodeURIComponent(o.customerEmail)}?subject=${encodeURIComponent(`Drift Labs order #${o.id.slice(0, 6).toUpperCase()}`)}`;
     $("odNumber").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
     $("odTitle").textContent = o.vehicle;
     $("odStatusPill").innerHTML = statusPill(o.status);
@@ -113,11 +122,9 @@ function openOrder(id) {
   });
 
   unsubThread = onSnapshot(query(collection(ref, "messages"), orderBy("createdAt", "asc")), (snap) => {
-    const msgs = snap.docs.map((d) => d.data());
-    $("thread").innerHTML = msgs.length
-      ? msgs.map((m) => `<div class="msg ${m.from === "admin" ? "mine" : "theirs"}">${linkify(m.text)}<span class="when">${m.from === "admin" ? "You" : "Customer"} · ${fmtDate(m.createdAt)}</span></div>`).join("")
-      : '<p class="muted small">No messages yet.</p>';
-    $("thread").scrollTop = $("thread").scrollHeight;
+    msgs = snap.docs.map((d) => d.data());
+    renderThread($("thread"), msgs, "admin", "Customer", "No messages yet.");
+    codes();
   });
 
   $("statusSel").onchange = () => save(ref, { status: $("statusSel").value });
@@ -133,14 +140,18 @@ function openOrder(id) {
 
   $("msgForm").onsubmit = async (e) => {
     e.preventDefault();
-    const text = $("msgText").value.trim();
-    if (!text) return;
+    const text = $("msgText").value.trim(), file = UPLOADS_ENABLED ? $("fileInput").files[0] : null;
+    if (!text && !file) return;
+    const bad = file ? checkFile(file) : "";
+    if (bad) { msg("msgErr", bad); return; }
+    const kind = $("fileKind").value;
     const btn = $("msgSend"); btn.disabled = true; msg("msgErr", "");
     try {
-      await addDoc(collection(ref, "messages"), { from: "admin", uid: auth.currentUser.uid, text, createdAt: serverTimestamp() });
+      const up = file ? { ...(await uploadFile(id, "admin", file, (p) => ($("upProgress").textContent = `Uploading ${p}%`))), fileKind: kind } : {};
+      await addDoc(collection(ref, "messages"), { from: "admin", uid: auth.currentUser.uid, text: text || "Sent a file.", createdAt: serverTimestamp(), ...up });
       await updateDoc(ref, { unreadByCustomer: true, lastMessageAt: serverTimestamp(), updatedAt: serverTimestamp() });
-      $("msgText").value = "";
-    } catch (err) { console.error(err); msg("msgErr", "Message didn't send. Try again."); }
-    finally { btn.disabled = false; }
+      $("msgForm").reset();
+    } catch (err) { console.error(err); msg("msgErr", "That didn't send. Try again."); }
+    finally { btn.disabled = false; $("upProgress").textContent = ""; }
   };
 }

@@ -65,8 +65,13 @@
         <div class="thread" id="thread" aria-live="polite"></div>
         <form class="composer" id="msgForm" novalidate>
           <label for="msgText" class="small">Reply to customer</label>
-          <textarea id="msgText"></textarea>
-          <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="err" id="msgErr" hidden></span></div>
+          <textarea id="msgText" maxlength="4500"></textarea>
+          <div class="grid2" id="uploadBox" hidden>
+            <div class="field"><label for="fileInput">Attach a file (optional)</label><input type="file" id="fileInput"></div>
+            <div class="field"><label for="fileKind">What is it?</label>
+              <select id="fileKind"><option>New tune</option><option>Revised tune</option><option>Logging config</option><option>Other file</option></select></div>
+          </div>
+          <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="small muted" id="upProgress" role="status"></span><span class="err" id="msgErr" hidden></span></div>
         </form>
       </div>
       <div class="stack">
@@ -90,6 +95,8 @@
         </div>
         <div class="card stack">
           <h2>Customer &amp; vehicle</h2>
+          <div class="notice" id="codesBox" hidden><p><b>Current engine codes</b></p><p id="codesNow" class="codes-line"></p></div>
+          <a class="small" id="emailLink" href="#">Email customer</a>
           <dl class="facts" id="odFacts"></dl>
         </div>
       </div>

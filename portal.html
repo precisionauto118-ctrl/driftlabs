@@ -135,6 +135,15 @@
         </div>
         <div class="field full"><label for="cam">Cam specs (if cammed)</label><input id="cam" placeholder="e.g. 220/236 duration, .600/.600 lift, 112+2 LSA"></div>
         <div class="field full"><label for="mods">Other mods</label><textarea id="mods" placeholder="Intake, exhaust, headers, injectors, boost level, etc."></textarea></div>
+        <div class="field" id="codesField" hidden>
+          <label for="codesStatus">Any engine codes right now?</label>
+          <select id="codesStatus"><option value="">Choose one</option><option value="none">I scanned it: no codes</option><option value="has">Yes, it has codes</option><option value="unscanned">I haven't scanned it yet</option></select>
+        </div>
+        <div class="field full" id="codesListField" hidden>
+          <label for="codes">List every code, including pending</label>
+          <textarea id="codes" maxlength="1000" placeholder="e.g. P0300 random misfire, P0171 lean bank 1 (pending)"></textarea>
+        </div>
+        <p class="small muted field full" id="codesNote" hidden>We check for existing problems before tuning. Scan with VCM Scanner or any OBD2 reader.</p>
         <div class="field full"><label for="goals">What do you want from the tune?</label><textarea id="goals" placeholder="e.g. Smooth daily driver, firmer shifts, safe power for track days"></textarea></div>
         <label class="check field full" for="agree"><input type="checkbox" id="agree"> I understand tunes are sold for off-road and competition use, and that Drift Labs does not remove or disable emissions equipment (catalytic converters, EGR or DPF). I understand all purchases are final and non-refundable.</label>
       </div>
@@ -167,9 +176,15 @@
         <div class="thread" id="thread" aria-live="polite"></div>
         <form class="composer" id="msgForm" novalidate>
           <label for="msgText" class="small">Message your tuner</label>
-          <textarea id="msgText" placeholder="Questions, log notes, or how the car is driving…"></textarea>
-          <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="err" id="msgErr" hidden></span></div>
-          <div class="notice info small stack" style="gap:6px">
+          <textarea id="msgText" maxlength="4500" placeholder="Questions, log notes, or how the car is driving…"></textarea>
+          <div class="grid2" id="uploadBox" hidden>
+            <div class="field"><label for="fileInput">Attach a file (optional)</label><input type="file" id="fileInput"></div>
+            <div class="field"><label for="fileKind">What is it?</label>
+              <select id="fileKind"><option>Datalog</option><option>Stock / current tune file</option><option>Log after new tune</option><option>Photo or screenshot</option><option>Other file</option></select></div>
+            <p class="small muted field full">Add a comment above: how it's driving, what changed, any problems. Files up to 50 MB.</p>
+          </div>
+          <div class="row"><button class="btn btn-primary" type="submit" id="msgSend">Send</button><span class="small muted" id="upProgress" role="status"></span><span class="err" id="msgErr" hidden></span></div>
+          <div class="notice info small stack" style="gap:6px" id="shareFiles">
             <p id="emailFiles" hidden><b>Sending files:</b> email your tune file and datalogs to <b class="email" id="filesEmail"></b> with <b id="filesOrderNo"></b> in the subject line.</p>
             <p><b id="linkLead">Sending files:</b> upload your tune file and datalogs to Google Drive or Dropbox, set sharing to "Anyone with the link," and paste the link in a message.</p>
           </div>
@@ -178,6 +193,18 @@
       <div class="card stack">
         <h2>Order details</h2>
         <p class="revs" id="odRevs"></p>
+        <div class="notice" id="codesBox" hidden>
+          <p><b>Current engine codes</b></p>
+          <p id="codesNow" class="codes-line"></p>
+          <button class="btn-link btn small" type="button" id="codesEdit">Update codes</button>
+          <form id="codesForm" hidden novalidate style="margin-top:10px">
+            <label for="codesStatus2">Any engine codes right now?</label>
+            <select id="codesStatus2"><option value="">Choose one</option><option value="none">I scanned it: no codes</option><option value="has">Yes, it has codes</option><option value="unscanned">I haven't scanned it yet</option></select>
+            <div class="field" id="codesList2" hidden><label for="codes2">List every code, including pending</label><textarea id="codes2" maxlength="1000"></textarea></div>
+            <div class="row"><button class="btn btn-primary" type="submit" id="codesSave">Save codes</button><span class="err" id="codesErr" hidden></span></div>
+          </form>
+        </div>
+        <p id="emailBox" class="small" hidden><b>Need a longer conversation?</b><br>Email <a id="emailLink" href="#"></a></p>
         <dl class="facts" id="odFacts"></dl>
       </div>
     </div>

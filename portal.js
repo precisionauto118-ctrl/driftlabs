@@ -5,8 +5,9 @@ import {
 import {
   collection, doc, addDoc, setDoc, updateDoc, query, where, orderBy, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { auth, db, $, esc, linkify, fmtDate, statusPill, friendlyAuthError, notify } from "./common.js";
-import { PACKAGES, STRIPE_LINKS, CONTACT_EMAIL } from "./settings.js";
+import { auth, db, $, esc, fmtDate, statusPill, friendlyAuthError, notify } from "./common.js";
+import { ACCEPT, checkFile, uploadFile, renderThread, drawCodes, isGM } from "./files.js";
+import { PACKAGES, STRIPE_LINKS, CONTACT_EMAIL, UPLOADS_ENABLED } from "./settings.js";
 
 // Show the "email your files" option only once a real contact email is set in settings.js
 const hasEmail = CONTACT_EMAIL && !CONTACT_EMAIL.endsWith("@example.com");
@@ -144,13 +145,22 @@ function syncTrans() {
   $("converterField").hidden = !auto;
   $("converterDetailField").hidden = !(auto && val("converter") === "Aftermarket converter");
 }
+function syncCodes() {
+  const gm = isGM(val("platform"));
+  $("codesField").hidden = $("codesNote").hidden = !gm;
+  $("codesListField").hidden = !(gm && val("codesStatus") === "has");
+}
+$("platform").onchange = syncCodes;
+$("codesStatus").onchange = syncCodes;
+$("codesStatus2").onchange = () => ($("codesList2").hidden = val("codesStatus2") !== "has");
+$("fileInput").accept = ACCEPT;
 $("trans").onchange = syncTrans;
 $("converter").onchange = syncTrans;
 
 function openNew() {
   const pre = new URLSearchParams(location.search).get("pkg");
   if (pre && PACKAGES[pre] && !val("pkg")) $("pkg").value = pre;
-  syncTrans();
+  syncTrans(); syncCodes();
   msg("orderErr", "");
   show("newView");
 }
@@ -166,6 +176,9 @@ $("orderForm").addEventListener("submit", async (e) => {
     if (!val("transModel")) missing.push("which automatic");
     if (!val("converter")) missing.push("your torque converter");
   }
+  const gm = isGM(val("platform"));
+  if (gm && !val("codesStatus")) missing.push("your engine code status");
+  if (gm && val("codesStatus") === "has" && !val("codes")) missing.push("your engine codes");
   if (!$("agree").checked) missing.push("the checkbox at the bottom");
   if (missing.length) { msg("orderErr", "Please add " + missing.join(", ") + "."); return; }
   msg("orderErr", "");
@@ -182,6 +195,8 @@ $("orderForm").addEventListener("submit", async (e) => {
     converter: auto ? val("converter") : "",
     converterDetail: auto && val("converter") === "Aftermarket converter" ? val("converterDetail") : "",
     cam: val("cam"), mods: val("mods"), goals: val("goals"),
+    codesStatus: gm ? val("codesStatus") : "",
+    codes: gm && val("codesStatus") === "has" ? val("codes") : "",
     agreedToTerms: true, paid: false, status: "awaiting_payment",
     unreadByAdmin: true, unreadByCustomer: false,
     createdAt: serverTimestamp(), updatedAt: serverTimestamp(), lastMessageAt: serverTimestamp()
@@ -190,7 +205,7 @@ $("orderForm").addEventListener("submit", async (e) => {
   try {
     const ref = await addDoc(collection(db, "orders"), data);
     notify(`New ${p.name} order: ${data.vehicle}`, { customer: data.customerName, email: data.customerEmail, package: `${p.name} ($${p.price})`, vehicle: data.vehicle, platform: data.platform });
-    $("orderForm").reset(); syncTrans();
+    $("orderForm").reset(); syncTrans(); syncCodes();
     location.hash = "order-" + ref.id;
   } catch (err) {
     console.error(err);
@@ -207,15 +222,29 @@ function openOrder(id) {
   show("orderView");
   $("thread").innerHTML = '<p class="muted small">Loading messages…</p>';
   const ref = doc(db, "orders", id);
+  let order = null, msgs = [];
+  const codes = () => drawCodes(order, msgs, $("codesBox"), $("codesNow"));
+  $("uploadBox").hidden = !UPLOADS_ENABLED;
+  $("shareFiles").hidden = UPLOADS_ENABLED;
+  $("msgForm").reset(); $("codesForm").reset(); $("upProgress").textContent = "";
+  $("codesBox").hidden = $("codesForm").hidden = $("codesList2").hidden = true;
+  msg("msgErr", ""); msg("codesErr", "");
+  $("codesEdit").onclick = () => ($("codesForm").hidden = !$("codesForm").hidden);
   unsubOrder = onSnapshot(ref, (snap) => {
     if (!snap.exists()) { location.hash = ""; return; }
     const o = { id: snap.id, ...snap.data() };
+    order = o; codes();
     $("odNumber").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
     $("emailFiles").hidden = !hasEmail;
     $("linkLead").textContent = hasEmail ? "Or:" : "Sending files:";
     if (hasEmail) {
       $("filesEmail").textContent = CONTACT_EMAIL;
       $("filesOrderNo").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
+    }
+    $("emailBox").hidden = !hasEmail;
+    if (hasEmail) {
+      $("emailLink").textContent = CONTACT_EMAIL;
+      $("emailLink").href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Order #${o.id.slice(0, 6).toUpperCase()} - ${o.vehicle}`)}`;
     }
     $("odTitle").textContent = o.vehicle;
     $("odStatus").innerHTML = statusPill(o.status);
@@ -239,26 +268,44 @@ function openOrder(id) {
   }, () => { location.hash = ""; });
 
   unsubThread = onSnapshot(query(collection(ref, "messages"), orderBy("createdAt", "asc")), (snap) => {
-    const msgs = snap.docs.map((d) => d.data());
-    $("thread").innerHTML = msgs.length
-      ? msgs.map((m) => `<div class="msg ${m.from === "customer" ? "mine" : "theirs"}">${linkify(m.text)}<span class="when">${m.from === "customer" ? "You" : "Drift Labs"} · ${fmtDate(m.createdAt)}</span></div>`).join("")
-      : '<p class="muted small">No messages yet. Say hi, or ask how to send your files.</p>';
-    $("thread").scrollTop = $("thread").scrollHeight;
+    msgs = snap.docs.map((d) => d.data());
+    renderThread($("thread"), msgs, "customer", "Drift Labs", "No messages yet. Say hi, or send your files.");
+    codes();
   });
+
+  async function post(fields) {
+    await addDoc(collection(ref, "messages"), { from: "customer", uid: user.uid, createdAt: serverTimestamp(), ...fields });
+    await updateDoc(ref, { unreadByAdmin: true, lastMessageAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    notify(`New message on ${$("odTitle").textContent}`, { customer: user.displayName || "", email: user.email, message: fields.text });
+  }
 
   $("msgForm").onsubmit = async (e) => {
     e.preventDefault();
-    const text = $("msgText").value.trim();
-    if (!text) return;
+    const text = val("msgText"), file = UPLOADS_ENABLED ? $("fileInput").files[0] : null;
+    if (!text && !file) { msg("msgErr", UPLOADS_ENABLED ? "Type a message or choose a file." : "Type a message."); return; }
+    const bad = file ? checkFile(file) : "";
+    if (bad) { msg("msgErr", bad); return; }
+    const kind = val("fileKind");
     const btn = $("msgSend"); btn.disabled = true; msg("msgErr", "");
     try {
-      await addDoc(collection(ref, "messages"), { from: "customer", uid: user.uid, text, createdAt: serverTimestamp() });
-      await updateDoc(ref, { unreadByAdmin: true, lastMessageAt: serverTimestamp(), updatedAt: serverTimestamp() });
-      notify(`New message on ${$("odTitle").textContent}`, { customer: user.displayName || "", email: user.email, message: text });
-      $("msgText").value = "";
+      const up = file ? { ...(await uploadFile(id, "customer", file, (p) => ($("upProgress").textContent = `Uploading ${p}%`))), fileKind: kind } : {};
+      await post({ text: text || "Uploaded a file.", ...up });
+      $("msgForm").reset();
     } catch (err) {
       console.error(err);
-      msg("msgErr", "Message didn't send. Try again.");
-    } finally { btn.disabled = false; }
+      msg("msgErr", file ? "That didn't send. Check your connection and try again, or email the file." : "Message didn't send. Try again.");
+    } finally { btn.disabled = false; $("upProgress").textContent = ""; }
+  };
+
+  $("codesForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const s = val("codesStatus2"), list = s === "has" ? val("codes2") : "";
+    if (!s || (s === "has" && !list)) { msg("codesErr", s ? "List your codes." : "Choose one."); return; }
+    const btn = $("codesSave"); btn.disabled = true; msg("codesErr", "");
+    try {
+      await post({ text: "Updated engine codes.", codesStatus: s, codes: list });
+      $("codesForm").reset(); $("codesList2").hidden = $("codesForm").hidden = true;
+    } catch (err) { console.error(err); msg("codesErr", "Couldn't save. Try again."); }
+    finally { btn.disabled = false; }
   };
 }

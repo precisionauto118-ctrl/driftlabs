@@ -21,6 +21,10 @@ Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
 - **Full test passed:** test order **#WZCNLJ** ("TEST ORDER - 2017 Chevrolet Silverado", Custom $350), paid with Stripe's test card, redirected back to the portal, then marked Paid in the admin dashboard.
 - The $350 test payment stays in the Stripe sandbox. Stripe can't delete payments. Sandbox data never shows in the live account, so it was left alone on purpose. **Don't** wipe sandbox data: that also deletes the 3 test payment links the site uses.
 
+**Built-in file uploads: coded, switched off until Firebase is on Blaze.** Uploads with comments (files.js), both directions. To turn on: 1) upgrade to Blaze with a budget alert, 2) create Storage (bucket driftlabstuning.firebasestorage.app), 3) publish storage.rules (not in this repo; names the admin email) and accept the Firestore access prompt, 4) set UPLOADS_ENABLED = true in settings.js, 5) test a real upload and download from both sides, plus a second customer account being refused.
+
+Engine codes: GM orders must report codes; customers can update them, admin sees the newest report. Live now.
+
 **Next steps, in order:**
 
 1. **Stripe: "Verify your business"** (you have to do this yourself: SSN/EIN and bank info). Then create the 3 live payment links. Use the same prices and set each to redirect to `https://precisionauto118-ctrl.github.io/driftlabs/portal.html` after payment. Paste them into `settings.js`. The "(test mode)" label on the Pay button disappears on its own.
@@ -41,6 +45,7 @@ Admin dashboard: https://precisionauto118-ctrl.github.io/driftlabs/admin.html
 | `common.js` | Shared Firebase setup and helpers. |
 | `settings.js` | **Your settings:** Stripe links, Formspree ID, contact email, packages, statuses. |
 | `firebase-config.js` | Firebase web config (public values, not secrets). |
+| `files.js` | File uploads, downloads and engine-code helpers. |
 | `portal.css` | Styles for the portal and admin pages. |
 | `README.md` | This file. |
 

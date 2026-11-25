@@ -17,6 +17,10 @@ export const FORMSPREE_ID = "";
 // Public contact email shown to customers
 export const CONTACT_EMAIL = "leviarnold.118@gmail.com";
 
+// Built-in file uploads. Turn on only after Firebase is on the Blaze plan,
+// Storage is created, and storage.rules is published.
+export const UPLOADS_ENABLED = false;
+
 /* =================================================== */
 
 export const PACKAGES = {
