@@ -176,6 +176,7 @@ $("orderForm").addEventListener("submit", async (e) => {
   if (!val("platform")) missing.push("a platform");
   if (!val("pkg")) missing.push("a package");
   if (!val("vehicle")) missing.push("your vehicle");
+  if (!val("fuel")) missing.push("your fuel");
   if (!val("maf")) missing.push("whether it has a MAF sensor");
   if (!val("trans")) missing.push("your transmission");
   if (val("trans") === "Automatic") {
