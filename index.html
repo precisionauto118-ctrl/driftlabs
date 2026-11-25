@@ -73,8 +73,15 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .btn-ghost:hover{border-color:var(--fg)}
 .btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .btn[disabled]{opacity:.6;cursor:wait}
-.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
-.chip{font-family:var(--mono);font-size:.78rem;padding:4px 10px;border:1px solid var(--line);border-radius:99px;color:var(--muted)}
+.chips{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px}
+.chip{font-family:var(--body);font-size:1rem;font-weight:600;padding:9px 18px;border-radius:99px;text-decoration:none;color:#15181d;background:#ffd21f;border:2px solid #ffd21f;animation:chip 1.8s ease-in-out infinite}
+.chip:nth-child(2){animation-delay:.6s}
+.chip:nth-child(3){animation-delay:1.2s}
+.chip:hover{filter:brightness(1.08)}
+.chip:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+@keyframes chip{0%,60%,100%{background:#ffd21f;border-color:#ffd21f;color:#15181d;transform:none;box-shadow:0 0 0 0 rgba(255,59,48,0)}
+  30%{background:#d4142a;border-color:#d4142a;color:#fff;transform:scale(1.07);box-shadow:0 0 22px 4px rgba(255,59,48,.6)}}
+@media (prefers-reduced-motion:reduce){.chip{animation:none}}
 
 /* Sections */
 section{padding-block:64px;border-top:1px solid var(--line)}
@@ -198,9 +205,9 @@ footer .legal{max-width:80ch}
         <a class="btn btn-ghost" href="#services">See what we tune</a>
       </div>
       <div class="chips">
-        <span class="chip">Megasquirt MS2 · MS3 · MSPNP</span>
-        <span class="chip">HP Tuners · GM cars &amp; trucks</span>
-        <span class="chip">NA &amp; NB Miata specialists</span>
+        <a class="chip" href="#services">Megasquirt MS2 · MS3 · MSPNP</a>
+        <a class="chip" href="#services">HP Tuners · GM cars &amp; trucks</a>
+        <a class="chip" href="#services">NA &amp; NB Miata specialists</a>
       </div>
     </div>
   </header>
