@@ -149,7 +149,12 @@ function syncCodes() {
   const gm = isGM(val("platform"));
   $("codesField").hidden = $("codesNote").hidden = !gm;
   $("codesListField").hidden = !(gm && val("codesStatus") === "has");
+  const ms = val("platform") === "Megasquirt";
+  $("timingField").hidden = $("timingNote").hidden = !ms;
+  $("timingDegField").hidden = !(ms && knowsTiming());
 }
+function knowsTiming() { return ["light", "unchecked"].includes(val("timingStatus")); }
+$("timingStatus").onchange = syncCodes;
 $("platform").onchange = syncCodes;
 $("codesStatus").onchange = syncCodes;
 $("codesStatus2").onchange = () => ($("codesList2").hidden = val("codesStatus2") !== "has");
@@ -171,6 +176,7 @@ $("orderForm").addEventListener("submit", async (e) => {
   if (!val("platform")) missing.push("a platform");
   if (!val("pkg")) missing.push("a package");
   if (!val("vehicle")) missing.push("your vehicle");
+  if (!val("maf")) missing.push("whether it has a MAF sensor");
   if (!val("trans")) missing.push("your transmission");
   if (val("trans") === "Automatic") {
     if (!val("transModel")) missing.push("which automatic");
@@ -179,6 +185,12 @@ $("orderForm").addEventListener("submit", async (e) => {
   const gm = isGM(val("platform"));
   if (gm && !val("codesStatus")) missing.push("your engine code status");
   if (gm && val("codesStatus") === "has" && !val("codes")) missing.push("your engine codes");
+  const ms = val("platform") === "Megasquirt";
+  if (ms && !val("timingStatus")) missing.push("whether you know your base timing");
+  if (ms && knowsTiming()) {
+    if (!val("timingDeg")) missing.push("your base timing in degrees");
+    else if (!$("timingDeg").checkValidity()) missing.push("a base timing between -20 and 60 degrees");
+  }
   if (!$("agree").checked) missing.push("the checkbox at the bottom");
   if (missing.length) { msg("orderErr", "Please add " + missing.join(", ") + "."); return; }
   msg("orderErr", "");
@@ -189,7 +201,7 @@ $("orderForm").addEventListener("submit", async (e) => {
     uid: user.uid, customerName: user.displayName || "", customerEmail: user.email,
     platform: val("platform"), pkg, pkgName: p.name, price: p.price,
     revisionsAllowed: p.revisions, revisionsUsed: 0,
-    vehicle: val("vehicle"), engine: val("engine"), induction: val("induction"), fuel: val("fuel"),
+    vehicle: val("vehicle"), engine: val("engine"), induction: val("induction"), maf: val("maf"), fuel: val("fuel"),
     transmission: val("trans"),
     transModel: auto ? val("transModel") : "",
     converter: auto ? val("converter") : "",
@@ -197,6 +209,7 @@ $("orderForm").addEventListener("submit", async (e) => {
     cam: val("cam"), mods: val("mods"), goals: val("goals"),
     codesStatus: gm ? val("codesStatus") : "",
     codes: gm && val("codesStatus") === "has" ? val("codes") : "",
+    baseTiming: !ms ? "" : !knowsTiming() ? "Customer doesn't know" : `${val("timingDeg")}° BTDC (${val("timingStatus") === "light" ? "checked with timing light" : "not checked with a light"})`,
     agreedToTerms: true, paid: false, status: "awaiting_payment",
     unreadByAdmin: true, unreadByCustomer: false,
     createdAt: serverTimestamp(), updatedAt: serverTimestamp(), lastMessageAt: serverTimestamp()
@@ -260,8 +273,8 @@ function openOrder(id) {
       ? `Automatic ${o.transModel}\n${o.converter}${o.converterDetail ? ": " + o.converterDetail : ""}`
       : o.transmission;
     $("odFacts").innerHTML = [
-      fact("Platform", o.platform), fact("Engine", o.engine), fact("Induction", o.induction), fact("Fuel", o.fuel),
-      fact("Transmission", trans), fact("Cam", o.cam), fact("Other mods", o.mods), fact("Goals", o.goals),
+      fact("Platform", o.platform), fact("Engine", o.engine), fact("Induction", o.induction), fact("MAF sensor", o.maf), fact("Fuel", o.fuel),
+      fact("Base timing", o.baseTiming), fact("Transmission", trans), fact("Cam", o.cam), fact("Other mods", o.mods), fact("Goals", o.goals),
       fact("Ordered", fmtDate(o.createdAt))
     ].join("");
     if (o.unreadByCustomer) updateDoc(ref, { unreadByCustomer: false }).catch(() => {});

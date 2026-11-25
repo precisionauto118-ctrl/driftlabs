@@ -113,6 +113,10 @@
           <select id="induction"><option>Naturally aspirated</option><option>Turbo</option><option>Supercharger</option></select>
         </div>
         <div class="field">
+          <label for="maf">Does it have a MAF sensor?</label>
+          <select id="maf"><option value="">Choose one</option><option>Yes, MAF installed</option><option>No MAF (speed density / MAP only)</option><option>Not sure</option></select>
+        </div>
+        <div class="field">
           <label for="fuel">Fuel</label>
           <select id="fuel"><option>91 octane</option><option>93 octane</option><option>E85 / flex</option><option>Other</option></select>
         </div>
@@ -139,6 +143,15 @@
         </div>
         <div class="field full"><label for="cam">Cam specs (if cammed)</label><input id="cam" placeholder="e.g. 220/236 duration, .600/.600 lift, 112+2 LSA"></div>
         <div class="field full"><label for="mods">Other mods</label><textarea id="mods" placeholder="Intake, exhaust, headers, injectors, boost level, etc."></textarea></div>
+        <div class="field" id="timingField" hidden>
+          <label for="timingStatus">Do you know your base timing?</label>
+          <select id="timingStatus"><option value="">Choose one</option><option value="light">Yes, checked with a timing light</option><option value="unchecked">Yes, but not checked with a light</option><option value="unknown">I don't know</option></select>
+        </div>
+        <div class="field" id="timingDegField" hidden>
+          <label for="timingDeg">Base timing (degrees BTDC)</label>
+          <input id="timingDeg" type="number" step="0.5" min="-20" max="60" inputmode="decimal" placeholder="e.g. 10">
+        </div>
+        <p class="small muted field full" id="timingNote" hidden>Base timing has to match what TunerStudio shows before we tune. If you don't know it, that's fine. We'll walk you through checking it.</p>
         <div class="field" id="codesField" hidden>
           <label for="codesStatus">Any engine codes right now?</label>
           <select id="codesStatus"><option value="">Choose one</option><option value="none">I scanned it: no codes</option><option value="has">Yes, it has codes</option><option value="unscanned">I haven't scanned it yet</option></select>
