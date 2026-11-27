@@ -267,7 +267,7 @@ function openOrder(id) {
   let order = null, msgs = [];
   const codes = () => drawCodes(order, msgs, $("codesBox"), $("codesNow"));
   $("uploadBox").hidden = !UPLOADS_ENABLED;
-  $("shareFiles").hidden = UPLOADS_ENABLED;
+  $("shareFiles").hidden = false; // email and links stay as a backup
   $("msgForm").reset(); $("codesForm").reset(); $("upProgress").textContent = "";
   $("payNotice").hidden = $("paidNotice").hidden = $("reviewNotice").hidden = true;
   $("msgForm").hidden = $("lockNotice").hidden = $("emailBox").hidden = $("codesEdit").hidden = true;
@@ -280,7 +280,7 @@ function openOrder(id) {
     order = o; codes();
     $("odNumber").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
     $("emailFiles").hidden = !hasEmail;
-    $("linkLead").textContent = hasEmail ? "Or:" : "Sending files:";
+    $("linkLead").textContent = hasEmail ? "Or:" : UPLOADS_ENABLED ? "Upload not working?" : "Sending files:";
     if (hasEmail) {
       $("filesEmail").textContent = CONTACT_EMAIL;
       $("filesOrderNo").textContent = "Order #" + o.id.slice(0, 6).toUpperCase();
